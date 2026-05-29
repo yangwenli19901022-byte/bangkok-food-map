@@ -1,5 +1,4 @@
-const places = 
-[
+const places = [
   {
     "id": 1,
     "name": "Gaggan Anand",
@@ -1925,4 +1924,5 @@ const places =
     "avgPrice": "THB 3000-5000",
     "hours": "18:00-23:00"
   }
-]; export default places;
+];
+export default places;
