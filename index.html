@@ -1,13 +1,2394 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh-CN">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>曼谷美食咖啡地图</title>
-    <!-- Leaflet will be loaded from npm package in the app bundle -->
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>曼谷美食咖啡地图 — 预览</title>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --paper: #f5eee4;
+  --thai-dark: #23312d;
+  --thai-teal: #0d6554;
+  --thai-gold: #c59b5a;
+  --thai-warm: #d8b192;
+  --thai-muted: #836a55;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { min-height: 100%; font-family: 'Inter', 'Noto Sans SC', sans-serif; color: var(--thai-dark); background: radial-gradient(circle at 18% 15%, rgba(197,155,90,0.16), transparent 11%), radial-gradient(circle at 86% 10%, rgba(14,102,85,0.10), transparent 16%), linear-gradient(180deg, #f7efe5 0%, #fbf7f0 100%); background-attachment: fixed; }
+.container { max-width: 1400px; margin: 0 auto; padding: 24px; display: grid; grid-template-columns: 380px 1fr; gap: 24px; min-height: 100vh; }
+@media (max-width: 1024px) { .container { grid-template-columns: 1fr; } }
+
+.sidebar { border-radius: 32px; border: 1px solid #d9c9a4; background: rgba(255,253,249,0.96); padding: 28px; box-shadow: 0 20px 60px rgba(32,30,24,0.12); display: flex; flex-direction: column; gap: 16px; max-height: calc(100vh - 48px); overflow: hidden; }
+.sidebar h1 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 26px; color: #1f352f; font-weight: 600; }
+.sidebar .subtitle { font-size: 12px; color: #716054; margin-top: 4px; line-height: 1.6; }
+
+.search-box { border-radius: 18px; border: 1px solid #f0e4cf; background: #fff9f2; padding: 10px 12px; }
+.search-box input { width: 100%; border-radius: 14px; border: 1px solid #d8b57b; padding: 10px 14px; font-size: 13px; outline: none; color: #3a372f; }
+.search-box input:focus { border-color: var(--thai-teal); }
+
+.filter-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.filter-btn { border-radius: 999px; padding: 5px 12px; font-size: 11px; font-weight: 500; border: none; cursor: pointer; transition: all 0.15s; background: #f5efe6; color: #6b5a45; }
+.filter-btn:hover { background: #ebe0d0; }
+.filter-btn.active { color: white; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+
+.sort-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
+.sort-row select { border-radius: 14px; border: 1px solid #d8b57b; padding: 6px 10px; font-size: 12px; background: white; color: #3a372f; outline: none; }
+.fav-toggle { border-radius: 14px; padding: 6px 12px; font-size: 12px; font-weight: 500; border: none; cursor: pointer; background: #f5efe6; color: #6b5a45; transition: all 0.15s; display: flex; align-items: center; gap: 4px; }
+.fav-toggle:hover { background: #ebe0d0; }
+.fav-toggle.active { background: var(--thai-gold); color: white; }
+
+.place-list { flex: 1; overflow-y: auto; padding-right: 4px; display: flex; flex-direction: column; gap: 8px; min-height: 0; }
+.place-list::-webkit-scrollbar { width: 6px; }
+.place-list::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--thai-gold), var(--thai-teal)); border-radius: 999px; }
+
+.place-card { border-radius: 18px; border: 1px solid #ece0d1; background: #fff; padding: 12px 14px; cursor: pointer; transition: all 0.15s; box-shadow: 0 2px 8px rgba(30,26,19,0.05); }
+.place-card:hover { box-shadow: 0 6px 18px rgba(30,26,19,0.1); transform: translateY(-1px); }
+.place-card.active { border-color: rgba(13,102,84,0.35); background: #eef7f2; }
+.place-card .header { display: flex; justify-content: space-between; align-items: flex-start; gap: 8px; }
+.place-card h3 { font-size: 15px; font-weight: 600; color: #25322f; font-family: 'Cormorant Garamond', Georgia, serif; }
+.place-card .desc { font-size: 12px; color: #726855; margin-top: 4px; line-height: 1.5; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.place-card .meta { display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 11px; color: #8a6f51; }
+.place-card .badges { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px; }
+.badge { border-radius: 999px; padding: 3px 8px; font-size: 10px; font-weight: 600; letter-spacing: 0.05em; }
+.badge-michelin { background: #b08b4f; color: white; }
+.badge-asia50 { background: #1565c0; color: white; }
+.badge-blackpearl { background: #7b1fa2; color: white; }
+.badge-other { background: #f0e0cc; color: #4a3825; }
+.badge-cat { background: #e8f4f8; color: #1565c0; }
+
+.fav-star { font-size: 16px; line-height: 1; cursor: pointer; background: none; border: none; padding: 2px; color: #d5c8b0; transition: color 0.15s; }
+.fav-star.active { color: var(--thai-gold); }
+
+.map-wrap { position: relative; border-radius: 36px; border: 1px solid #d7c4a4; background: #fbf6ef; padding: 12px; box-shadow: 0 24px 80px rgba(38,34,21,0.12); }
+.map-inner { border-radius: 28px; overflow: hidden; height: calc(100vh - 72px); background: white; }
+.leaflet-container { width: 100%; height: 100%; border-radius: 28px; }
+.leaflet-popup-content-wrapper, .leaflet-popup-tip { background: #fff8f0; border: 1px solid rgba(197,155,90,0.35); border-radius: 18px; }
+
+/* Detail Modal */
+.detail-overlay { position: absolute; inset: 0; z-index: 2000; display: flex; justify-content: flex-end; align-items: flex-start; padding: 20px; pointer-events: none; }
+.detail-modal { pointer-events: auto; width: 100%; max-width: 420px; max-height: 90vh; overflow-y: auto; border-radius: 32px; border: 1px solid #d9c9a4; background: #fffdf8; box-shadow: 0 24px 80px rgba(38,34,21,0.25); }
+.detail-modal .photo { width: 100%; height: 220px; object-fit: cover; border-radius: 32px 32px 0 0; }
+.detail-modal .content { padding: 24px; }
+.detail-modal h2 { font-family: 'Cormorant Garamond', Georgia, serif; font-size: 26px; color: #1f352f; }
+.detail-modal .info-block { margin-top: 16px; border-radius: 24px; border: 1px solid #f0e4cf; background: #fff9f2; padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+.detail-modal .info-row { display: flex; gap: 10px; align-items: flex-start; }
+.detail-modal .info-row .icon { font-size: 18px; line-height: 1; margin-top: 2px; }
+.detail-modal .info-row .label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.1em; color: #8a6f51; font-weight: 600; }
+.detail-modal .info-row .value { font-size: 14px; color: #3d352f; margin-top: 2px; }
+.detail-modal .actions { display: flex; gap: 10px; margin-top: 20px; }
+.detail-modal .actions a, .detail-modal .actions button { flex: 1; text-align: center; padding: 12px; border-radius: 18px; font-size: 14px; font-weight: 600; text-decoration: none; cursor: pointer; border: none; }
+.detail-modal .btn-primary { background: var(--thai-teal); color: white; }
+.detail-modal .btn-secondary { background: white; color: #5d4a33; border: 1px solid #d8b57b; }
+.detail-modal .close-btn { position: absolute; top: 16px; right: 16px; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.9); border: none; cursor: pointer; font-size: 18px; color: #4a3825; display: flex; align-items: center; justify-content: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+
+.stats-bar { border-radius: 20px; border: 1px solid #e7d9c2; background: #fcfaf6; padding: 14px 18px; font-size: 13px; color: #6f5f4a; display: flex; justify-content: space-between; }
+
+.custom-icon { background: transparent !important; border: none !important; }
+.custom-icon-inner { width: 28px; height: 28px; border-radius: 50%; border: 3px solid white; box-shadow: 0 2px 8px rgba(0,0,0,0.35); display: flex; align-items: center; justify-content: center; transition: all 0.25s ease; }
+.custom-icon-inner::after { content: ''; width: 8px; height: 8px; background: white; border-radius: 50%; }
+.custom-icon-active .custom-icon-inner { width: 36px; height: 36px; border-width: 4px; box-shadow: 0 0 0 6px rgba(255,255,255,0.4), 0 4px 16px rgba(0,0,0,0.4); }
+.custom-icon-active .custom-icon-inner::after { width: 10px; height: 10px; }
+
+/* Pulse ring for active marker */
+.pulse-ring { position: absolute; width: 36px; height: 36px; border-radius: 50%; animation: pulse 1.8s infinite; pointer-events: none; }
+@keyframes pulse {
+  0% { transform: scale(1); opacity: 0.6; box-shadow: 0 0 0 0 rgba(197,155,90,0.7); }
+  70% { transform: scale(2.2); opacity: 0; box-shadow: 0 0 0 12px rgba(197,155,90,0); }
+  100% { transform: scale(2.2); opacity: 0; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+  <aside class="sidebar">
+    <div>
+      <h1>曼谷美食地图</h1>
+    </div>
+
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="搜索咖啡馆、夜市或街区…">
+    </div>
+
+    <div class="filter-row" id="categoryFilters">
+      <button class="filter-btn active" data-cat="all" style="background:#0d6554; color:white;">全部</button>
+      <button class="filter-btn" data-cat="restaurant">餐厅</button>
+      <button class="filter-btn" data-cat="cafe">咖啡馆</button>
+      <button class="filter-btn" data-cat="bar">酒吧</button>
+      <button class="filter-btn" data-cat="streetfood">街头美食</button>
+      <button class="filter-btn" data-cat="other">本地推荐</button>
+    </div>
+
+    <div class="sort-row">
+      <select id="sortSelect">
+        <option value="default">默认排序</option>
+        <option value="distance">距离最近</option>
+        <option value="name">名称排序</option>
+      </select>
+      <button class="fav-toggle" id="favToggle">☆ 收藏 <span id="favCount"></span></button>
+    </div>
+
+    <div class="place-list" id="placeList"></div>
+
+    <div class="stats-bar">
+      <span>当前显示</span>
+      <strong id="statsCount">0 / 0</strong>
+    </div>
+  </aside>
+
+  <main class="map-wrap">
+    <div class="map-inner">
+      <div id="map"></div>
+    </div>
+    <div id="detailOverlay" class="detail-overlay" style="display:none;"></div>
+  </main>
+</div>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" crossorigin=""></script>
+<script>
+const PLACES = [
+  {
+    "id": 1,
+    "name": "Gaggan Anand",
+    "short": "亚洲前50餐厅，现代印度创意料理",
+    "address": "68/1 Soi Langsuan, Lumpini",
+    "lat": 13.730946,
+    "lng": 100.539049,
+    "source": "2023-michelin,2024-michelin,2026-asia50",
+    "year": 2023,
+    "website": "https://www.gaggananand.com/",
+    "photos": [
+      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=60"
+    ],
+    "avgPrice": "THB 2,500",
+    "phone": "+66 2 652 1700",
+    "hours": "12:00-14:30 / 18:00-22:30",
+    "category": "restaurant"
+  },
+  {
+    "id": 2,
+    "name": "Sühring",
+    "short": "米其林双星，德国风味现代料理",
+    "address": "10 Yen Akat Soi 3, Chong Nonsi",
+    "lat": 13.726383,
+    "lng": 100.530721,
+    "source": "2025-michelin,2026-michelin,2026-asia50",
+    "year": 2023,
+    "website": "https://www.suhring.com/",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80"
+    ],
+    "avgPrice": "THB 4,200",
+    "phone": "+66 2 679 3955",
+    "hours": "18:00-23:00",
+    "category": "restaurant"
+  },
+  {
+    "id": 3,
+    "name": "Le Du",
+    "short": "当代泰式料理与本地季节食材",
+    "address": "399/3 Silom Soi 7, Silom",
+    "lat": 13.723769,
+    "lng": 100.545626,
+    "source": "2024-michelin,2025-michelin,2023-asia50",
+    "year": 2023,
+    "website": "https://ledubkk.com/",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "restaurant"
+  },
+  {
+    "id": 4,
+    "name": "Nahm",
+    "short": "米其林推荐经典泰国风味",
+    "address": "27 S Sathorn Rd, Sathorn",
+    "lat": 13.72491,
+    "lng": 100.532354,
+    "source": "2024-michelin,2025-michelin",
+    "year": 2023,
+    "website": "https://www.google.com/search?q=Nahm+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "restaurant"
+  },
+  {
+    "id": 5,
+    "name": "Sorn",
+    "short": "米其林二星南部泰式料理",
+    "address": "56 Sukhumvit 26, Khlong Tan",
+    "lat": 13.734103,
+    "lng": 100.569049,
+    "source": "2025-michelin,2026-michelin",
+    "year": 2023,
+    "website": "https://sornfinesouthern.com/",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "restaurant"
+  },
+  {
+    "id": 6,
+    "name": "Paste",
+    "short": "亚洲前50餐厅，皇室泰式新潮美食",
+    "address": "3/1 Soi Tantawan, Lumpini",
+    "lat": 13.734446,
+    "lng": 100.529501,
+    "source": "2024-michelin,2025-michelin,2025-asia50",
+    "year": 2023,
+    "website": "https://pastebangkok.com/",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "restaurant"
+  },
+  {
+    "id": 7,
+    "name": "Jay Fai",
+    "short": "米其林一星街头海鲜煎蛋",
+    "address": "327 Maha Chai Rd, Samran Rat",
+    "lat": 13.7527,
+    "lng": 100.537656,
+    "source": "2023-michelin,2024-michelin",
+    "year": 2023,
+    "website": "https://www.google.com/search?q=Jay+Fai+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "restaurant"
+  },
+  {
+    "id": 8,
+    "name": "Bo.lan",
+    "short": "传统泰式烹饪与有机菜园",
+    "address": "24 Sukhumvit 53, Phra Khanong",
+    "lat": 13.730344,
+    "lng": 100.589491,
+    "source": "2023-michelin,2024-michelin",
+    "year": 2023,
+    "website": "https://bolan.co.th/",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "restaurant"
+  },
+  {
+    "id": 9,
+    "name": "80/20",
+    "short": "本地食材与轻奢风味",
+    "address": "72/1 Sukhumvit 61 Lane 1, Phra Khanong",
+    "lat": 13.732894,
+    "lng": 100.589146,
+    "source": "other",
+    "year": 2023,
+    "website": "https://www.google.com/search?q=80%2F20+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 10,
+    "name": "Canvas",
+    "short": "现代泰式料理与艺术呈盘",
+    "address": "8/8 Sukhumvit 55, Thonglor",
+    "lat": 13.738101,
+    "lng": 100.580298,
+    "source": "2023-asia50",
+    "year": 2023,
+    "website": "https://www.google.com/search?q=Canvas+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "restaurant"
+  },
+  {
+    "id": 11,
+    "name": "Aksorn",
+    "short": "米其林推荐经典泰式家常菜",
+    "address": "45 Sukhumvit 23, Khlong Toei",
+    "lat": 13.727281,
+    "lng": 100.544434,
+    "source": "other",
+    "year": 2023,
+    "website": "https://www.google.com/search?q=Aksorn+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 12,
+    "name": "Saneh Jaan",
+    "short": "传统泰式名厨私房料理",
+    "address": "26 Sukhumvit 23, Khlong Toei",
+    "lat": 13.72753,
+    "lng": 100.555367,
+    "source": "other",
+    "year": 2023,
+    "website": "https://www.google.com/search?q=Saneh+Jaan+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 13,
+    "name": "Elements",
+    "short": "米其林三星主厨新派泰料理",
+    "address": "42 Sukhumvit 26, Khlong Tan",
+    "lat": 13.740046,
+    "lng": 100.570255,
+    "source": "2025-asia50",
+    "year": 2023,
+    "website": "https://www.google.com/search?q=Elements+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "restaurant"
+  },
+  {
+    "id": 14,
+    "name": "Le Normandie",
+    "short": "老牌法式美馔与河畔华丽氛围",
+    "address": "48 Oriental Ave, Riverside",
+    "lat": 13.71926,
+    "lng": 100.520099,
+    "source": "2024-michelin,2025-michelin",
+    "year": 2023,
+    "website": "https://www.google.com/search?q=Le+Normandie+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "restaurant"
+  },
+  {
+    "id": 15,
+    "name": "Aaharn",
+    "short": "现代泰式多道套餐体验",
+    "address": "80/1 Sukhumvit 53, Phra Khanong",
+    "lat": 13.733459,
+    "lng": 100.584564,
+    "source": "other",
+    "year": 2023,
+    "website": "https://www.google.com/search?q=Aaharn+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 16,
+    "name": "Savelberg Bangkok",
+    "short": "荷式经典与泰式食材混搭",
+    "address": "37/1 Langsuan Rd, Pathum Wan",
+    "lat": 13.741581,
+    "lng": 100.541025,
+    "source": "2024-michelin,2025-michelin",
+    "year": 2023,
+    "website": "https://www.google.com/search?q=Savelberg+Bangkok+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "restaurant"
+  },
+  {
+    "id": 17,
+    "name": "Issaya Siamese Club",
+    "short": "名厨 Pailin 的泰式创意料理",
+    "address": "4 Sri Aksorn Rd, Langsuan",
+    "lat": 13.747885,
+    "lng": 100.54249,
+    "source": "2023-michelin,2024-michelin",
+    "year": 2023,
+    "website": "https://www.google.com/search?q=Issaya+Siamese+Club+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "restaurant"
+  },
+  {
+    "id": 18,
+    "name": "Bunker",
+    "short": "美式料理与工业风酒吧",
+    "address": "50 Sukhumvit 55, Thonglor",
+    "lat": 13.74156,
+    "lng": 100.580198,
+    "source": "other",
+    "year": 2023,
+    "website": "https://www.google.com/search?q=Bunker+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 19,
+    "name": "Dala",
+    "short": "法式料理与繁华城市绿洲",
+    "address": "152/3 Ploenchit Rd, Ploenchit",
+    "lat": 13.754731,
+    "lng": 100.536022,
+    "source": "other",
+    "year": 2023,
+    "website": "https://www.google.com/search?q=Dala+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 20,
+    "name": "Babette's The Steakhouse",
+    "short": "精品牛排与经典西餐",
+    "address": "57 Sukhumvit 39, Phrom Phong",
+    "lat": 13.740391,
+    "lng": 100.568401,
+    "source": "other",
+    "year": 2023,
+    "website": "https://www.google.com/search?q=Babette%27s+The+Steakhouse+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 21,
+    "name": "The Bamboo Bar",
+    "short": "曼谷最经典的酒店鸡尾酒吧",
+    "address": "Mandarin Oriental, Riverside",
+    "lat": 13.719839,
+    "lng": 100.522418,
+    "source": "other",
+    "year": 2023,
+    "website": "https://www.google.com/search?q=The+Bamboo+Bar+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "bar"
+  },
+  {
+    "id": 22,
+    "name": "Tropic City",
+    "short": "亚洲前50酒吧，热带风味鸡尾酒",
+    "address": "672/71 Charoenkrung Rd, Charoenkrung",
+    "lat": 13.725748,
+    "lng": 100.502578,
+    "source": "2023-asia50",
+    "year": 2023,
+    "website": "https://www.google.com/search?q=Tropic+City+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "restaurant"
+  },
+  {
+    "id": 23,
+    "name": "Teens of Thailand",
+    "short": "经典琴通纳那巷的特色鸡尾酒",
+    "address": "76 Soi Nana, Chinatown",
+    "lat": 13.743943,
+    "lng": 100.516656,
+    "source": "other",
+    "year": 2023,
+    "website": "https://www.google.com/search?q=Teens+of+Thailand+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 24,
+    "name": "Backstage Cocktail Bar",
+    "short": "表演主题调酒吧",
+    "address": "6 Sukhumvit 23, Asoke",
+    "lat": 13.73826,
+    "lng": 100.560303,
+    "source": "other",
+    "year": 2023,
+    "website": "https://www.google.com/search?q=Backstage+Cocktail+Bar+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "bar"
+  },
+  {
+    "id": 25,
+    "name": "Rabbit Hole",
+    "short": "隐秘酒吧与创意调酒",
+    "address": "116/2 Thonglor 13, Thonglor",
+    "lat": 13.742644,
+    "lng": 100.588421,
+    "source": "other",
+    "year": 2023,
+    "website": "https://www.google.com/search?q=Rabbit+Hole+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "bar"
+  },
+  {
+    "id": 26,
+    "name": "Iron Balls Distillery",
+    "short": "工业风烈酒与手调鸡尾酒",
+    "address": "30 Sukhumvit 26, Khlong Tan",
+    "lat": 13.730884,
+    "lng": 100.564776,
+    "source": "other",
+    "year": 2024,
+    "website": "https://www.google.com/search?q=Iron+Balls+Distillery+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "bar"
+  },
+  {
+    "id": 27,
+    "name": "Vesper",
+    "short": "现代欧风酒吧餐厅",
+    "address": "10 Convent Rd, Silom",
+    "lat": 13.72726,
+    "lng": 100.536052,
+    "source": "other",
+    "year": 2024,
+    "website": "https://www.google.com/search?q=Vesper+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 28,
+    "name": "Asia Today",
+    "short": "香料主题小酒吧",
+    "address": "189/4 Charoen Krung 24, Chinatown",
+    "lat": 13.724897,
+    "lng": 100.49893,
+    "source": "other",
+    "year": 2024,
+    "website": "https://www.google.com/search?q=Asia+Today+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 29,
+    "name": "Smalls",
+    "short": "舒适老洋房风情的地下酒吧",
+    "address": "186/3 Suan Phlu, Sathorn",
+    "lat": 13.725795,
+    "lng": 100.536835,
+    "source": "other",
+    "year": 2024,
+    "website": "https://www.google.com/search?q=Smalls+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 30,
+    "name": "J.Boroski",
+    "short": "私人订制鸡尾酒体验",
+    "address": "3/1 Sukhumvit 55, Thonglor",
+    "lat": 13.743801,
+    "lng": 100.578775,
+    "source": "other",
+    "year": 2024,
+    "website": "https://www.google.com/search?q=J.Boroski+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 31,
+    "name": "TEP BAR",
+    "short": "经典泰式风味调酒与传统表演",
+    "address": "69/9 Soi Nana, Chinatown",
+    "lat": 13.737697,
+    "lng": 100.511733,
+    "source": "other",
+    "year": 2024,
+    "website": "https://www.google.com/search?q=TEP+BAR+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "bar"
+  },
+  {
+    "id": 32,
+    "name": "The Locker Room",
+    "short": "秘密酒吧与运动主题调酒",
+    "address": "7/1 Sukhumvit 31, Phrom Phong",
+    "lat": 13.748768,
+    "lng": 100.535091,
+    "source": "other",
+    "year": 2024,
+    "website": "https://www.google.com/search?q=The+Locker+Room+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 33,
+    "name": "The House on Sathorn",
+    "short": "历史建筑里的酒吧餐厅",
+    "address": "106 North Sathorn Rd, Sathorn",
+    "lat": 13.719801,
+    "lng": 100.533656,
+    "source": "other",
+    "year": 2024,
+    "website": "https://www.google.com/search?q=The+House+on+Sathorn+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 34,
+    "name": "The Bar Upstairs",
+    "short": "屋顶酒吧与城市夜景",
+    "address": "49/2 Soi Ruamrudee, Lumphini",
+    "lat": 13.721402,
+    "lng": 100.540234,
+    "source": "other",
+    "year": 2024,
+    "website": "https://www.google.com/search?q=The+Bar+Upstairs+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "bar"
+  },
+  {
+    "id": 35,
+    "name": "Sky Bar Lebua",
+    "short": "高空夜景与经典鸡尾酒",
+    "address": "1055 Silom Rd, Silom",
+    "lat": 13.72903,
+    "lng": 100.547586,
+    "source": "other",
+    "year": 2024,
+    "website": "https://www.google.com/search?q=Sky+Bar+Lebua+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "bar"
+  },
+  {
+    "id": 36,
+    "name": "Moon Bar",
+    "short": "高空屋顶酒吧俯瞰湄南河",
+    "address": "21/100 South Sathon Rd, Sathorn",
+    "lat": 13.7203,
+    "lng": 100.544373,
+    "source": "other",
+    "year": 2024,
+    "website": "https://www.google.com/search?q=Moon+Bar+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "bar"
+  },
+  {
+    "id": 37,
+    "name": "Octave Rooftop Lounge",
+    "short": "360 度天台派对酒吧",
+    "address": "2 Sukhumvit 57, Thonglor",
+    "lat": 13.737039,
+    "lng": 100.581823,
+    "source": "other",
+    "year": 2024,
+    "website": "https://www.google.com/search?q=Octave+Rooftop+Lounge+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "bar"
+  },
+  {
+    "id": 38,
+    "name": "Above Eleven",
+    "short": "秘鲁日式融合屋顶酒吧",
+    "address": "38/8 Sukhumvit 11, Nana",
+    "lat": 13.751317,
+    "lng": 100.536259,
+    "source": "other",
+    "year": 2024,
+    "website": "https://www.google.com/search?q=Above+Eleven+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 39,
+    "name": "Vertigo Too",
+    "short": "双层屋顶酒吧与城市天际线",
+    "address": "12/52 South Sathon Rd, Sathorn",
+    "lat": 13.723734,
+    "lng": 100.530073,
+    "source": "other",
+    "year": 2024,
+    "website": "https://www.google.com/search?q=Vertigo+Too+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 40,
+    "name": "HI-SO Bar",
+    "short": "豪华酒店顶部休闲酒吧",
+    "address": "2 North Sathorn Rd, Sathorn",
+    "lat": 13.727174,
+    "lng": 100.546487,
+    "source": "other",
+    "year": 2024,
+    "website": "https://www.google.com/search?q=HI-SO+Bar+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "bar"
+  },
+  {
+    "id": 41,
+    "name": "Mahanakhon SkyBar",
+    "short": "泰国最高观景酒吧",
+    "address": "114 Naradhiwas Rajanagarindra Rd, Silom",
+    "lat": 13.730252,
+    "lng": 100.548014,
+    "source": "other",
+    "year": 2024,
+    "website": "https://www.google.com/search?q=Mahanakhon+SkyBar+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "bar"
+  },
+  {
+    "id": 42,
+    "name": "Scarlett Wine Bar",
+    "short": "红酒与城市天际观景",
+    "address": "37-37/1 Patpong 2, Silom",
+    "lat": 13.72475,
+    "lng": 100.542288,
+    "source": "other",
+    "year": 2024,
+    "website": "https://www.google.com/search?q=Scarlett+Wine+Bar+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "bar"
+  },
+  {
+    "id": 43,
+    "name": "ThreeSixty Rooftop Bar",
+    "short": "全景露台酒吧与夜景",
+    "address": "40/5 Surawong Rd, Silom",
+    "lat": 13.726213,
+    "lng": 100.536517,
+    "source": "other",
+    "year": 2024,
+    "website": "https://www.google.com/search?q=ThreeSixty+Rooftop+Bar+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "bar"
+  },
+  {
+    "id": 44,
+    "name": "Red Sky",
+    "short": "大型屋顶酒吧与法式餐点",
+    "address": "999/99 Rama I Rd, Pathum Wan",
+    "lat": 13.748529,
+    "lng": 100.53975,
+    "source": "other",
+    "year": 2024,
+    "website": "https://www.google.com/search?q=Red+Sky+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 45,
+    "name": "CÉ LA VI",
+    "short": "亚洲前50酒吧之一的高端天台",
+    "address": "39/8-9 Sathorn Rd, Sathorn",
+    "lat": 13.723744,
+    "lng": 100.536056,
+    "source": "2024-asia50",
+    "year": 2024,
+    "website": "https://www.google.com/search?q=C%C3%89+LA+VI+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "restaurant"
+  },
+  {
+    "id": 46,
+    "name": "Mikkeller Bangkok",
+    "short": "精酿啤酒酒吧与潮流氛围",
+    "address": "38 Sukhumvit 26, Khlong Tan",
+    "lat": 13.736164,
+    "lng": 100.555232,
+    "source": "other",
+    "year": 2024,
+    "website": "https://www.google.com/search?q=Mikkeller+Bangkok+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 47,
+    "name": "Iron Fairies",
+    "short": "梦幻铁艺主题酒吧",
+    "address": "464/1-5 Thonglor 10, Thonglor",
+    "lat": 13.737441,
+    "lng": 100.577903,
+    "source": "other",
+    "year": 2024,
+    "website": "https://www.google.com/search?q=Iron+Fairies+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 48,
+    "name": "Q Bar",
+    "short": "经典夜店与国际调酒",
+    "address": "44/5 Sukhumvit 11, Nana",
+    "lat": 13.75325,
+    "lng": 100.547737,
+    "source": "other",
+    "year": 2024,
+    "website": "https://www.google.com/search?q=Q+Bar+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "bar"
+  },
+  {
+    "id": 49,
+    "name": "Hair of the Dog",
+    "short": "美式酒吧与独特鸡尾酒",
+    "address": "170/1 Sukhumvit 55, Thonglor",
+    "lat": 13.741155,
+    "lng": 100.577569,
+    "source": "other",
+    "year": 2024,
+    "website": "https://www.google.com/search?q=Hair+of+the+Dog+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 50,
+    "name": "Forbidden City",
+    "short": "老牌中式风格酒吧",
+    "address": "29/3-4 Soi Ruamrudee, Lumphini",
+    "lat": 13.724262,
+    "lng": 100.540671,
+    "source": "other",
+    "year": 2024,
+    "website": "https://www.google.com/search?q=Forbidden+City+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 51,
+    "name": "The Speakeasy",
+    "short": "复古风格的隐秘屋顶酒吧",
+    "address": "939/39 Rama I Rd, Pathum Wan",
+    "lat": 13.75373,
+    "lng": 100.529728,
+    "source": "other",
+    "year": 2025,
+    "website": "https://www.google.com/search?q=The+Speakeasy+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "bar"
+  },
+  {
+    "id": 52,
+    "name": "Hemingway's Bangkok",
+    "short": "晚宴式酒吧与经典鸡尾酒",
+    "address": "1 Sukhumvit 11, Nana",
+    "lat": 13.753107,
+    "lng": 100.542421,
+    "source": "other",
+    "year": 2025,
+    "website": "https://www.google.com/search?q=Hemingway%27s+Bangkok+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 53,
+    "name": "L'Atelier de Joël Robuchon",
+    "short": "名厨法国料理餐酒体验",
+    "address": "39/1-2 Sathorn Rd, Sathorn",
+    "lat": 13.7204,
+    "lng": 100.543438,
+    "source": "other",
+    "year": 2025,
+    "website": "https://www.google.com/search?q=L%27Atelier+de+Jo%C3%ABl+Robuchon+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 54,
+    "name": "Maison Jean Philippe",
+    "short": "法式甜点与咖啡轻食",
+    "address": "5/F EmQuartier, Phrom Phong",
+    "lat": 13.735755,
+    "lng": 100.57169,
+    "source": "other",
+    "year": 2025,
+    "website": "https://www.google.com/search?q=Maison+Jean+Philippe+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 55,
+    "name": "Roast",
+    "short": "精品咖啡与全天早午餐",
+    "address": "49/2 The Commons, Thonglor",
+    "lat": 13.74259,
+    "lng": 100.577741,
+    "source": "other",
+    "year": 2025,
+    "website": "https://www.google.com/search?q=Roast+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 56,
+    "name": "Casa Lapin",
+    "short": "复古风格精品咖啡馆",
+    "address": "16 Sukhumvit 49, Phrom Phong",
+    "lat": 13.738878,
+    "lng": 100.571934,
+    "source": "other",
+    "year": 2025,
+    "website": "https://www.google.com/search?q=Casa+Lapin+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 57,
+    "name": "One Ounce for Onion",
+    "short": "亚洲前50咖啡馆与手冲精品",
+    "address": "98/1 Sukhumvit 55, Thonglor",
+    "lat": 13.739343,
+    "lng": 100.579179,
+    "source": "2024-asia50",
+    "year": 2025,
+    "website": "https://www.google.com/search?q=One+Ounce+for+Onion+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "restaurant"
+  },
+  {
+    "id": 58,
+    "name": "Toby's",
+    "short": "澳式早午餐与手冲咖啡",
+    "address": "36 Soi Sukhumvit 38, Phrom Phong",
+    "lat": 13.741449,
+    "lng": 100.566043,
+    "source": "other",
+    "year": 2025,
+    "website": "https://www.google.com/search?q=Toby%27s+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 59,
+    "name": "Roots Handmade Coffee",
+    "short": "本地烘焙与咖啡实验室",
+    "address": "37/1 Sukhumvit 49, Phrom Phong",
+    "lat": 13.732985,
+    "lng": 100.567288,
+    "source": "other",
+    "year": 2025,
+    "website": "https://www.google.com/search?q=Roots+Handmade+Coffee+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "cafe"
+  },
+  {
+    "id": 60,
+    "name": "Café Tartine",
+    "short": "法式甜点与温馨咖啡时光",
+    "address": "29 Sukhumvit 55, Thonglor",
+    "lat": 13.737319,
+    "lng": 100.584459,
+    "source": "other",
+    "year": 2025,
+    "website": "https://www.google.com/search?q=Caf%C3%A9+Tartine+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 61,
+    "name": "Audrey Café",
+    "short": "网红泰式西式混搭甜点",
+    "address": "4 Siam Square Soi 3, Pathum Wan",
+    "lat": 13.74887,
+    "lng": 100.535542,
+    "source": "other",
+    "year": 2025,
+    "website": "https://www.google.com/search?q=Audrey+Caf%C3%A9+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 62,
+    "name": "After You Dessert Cafe",
+    "short": "甜点连锁招牌蜜糖吐司",
+    "address": "Siam Square One, Pathum Wan",
+    "lat": 13.753368,
+    "lng": 100.538637,
+    "source": "other",
+    "year": 2025,
+    "website": "https://www.google.com/search?q=After+You+Dessert+Cafe+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "cafe"
+  },
+  {
+    "id": 63,
+    "name": "Mont Nom Sod",
+    "short": "经典泰式牛奶吐司与甜品",
+    "address": "2/1 Sukhumvit Soi 21, Asoke",
+    "lat": 13.739556,
+    "lng": 100.556446,
+    "source": "other",
+    "year": 2025,
+    "website": "https://www.google.com/search?q=Mont+Nom+Sod+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 64,
+    "name": "Mae Varee Mango Sticky Rice",
+    "short": "知名芒果糯米饭老店",
+    "address": "16 Ari Samphan Soi 1, Ari",
+    "lat": 13.787899,
+    "lng": 100.538823,
+    "source": "other",
+    "year": 2025,
+    "website": "https://www.google.com/search?q=Mae+Varee+Mango+Sticky+Rice+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 65,
+    "name": "Coffee Beans by Dao",
+    "short": "简约文青风咖啡馆",
+    "address": "14 Sukhumvit 49, Phrom Phong",
+    "lat": 13.74119,
+    "lng": 100.561871,
+    "source": "other",
+    "year": 2025,
+    "website": "https://www.google.com/search?q=Coffee+Beans+by+Dao+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "cafe"
+  },
+  {
+    "id": 66,
+    "name": "Gallery Drip Coffee",
+    "short": "画廊主题手冲精品咖啡",
+    "address": "Soi Ari 5, Ari",
+    "lat": 13.787496,
+    "lng": 100.548486,
+    "source": "other",
+    "year": 2025,
+    "website": "https://www.google.com/search?q=Gallery+Drip+Coffee+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "cafe"
+  },
+  {
+    "id": 67,
+    "name": "Rocket Coffeebar",
+    "short": "北欧风格咖啡与早午餐",
+    "address": "Soi Sukhumvit 49, Phrom Phong",
+    "lat": 13.737346,
+    "lng": 100.565581,
+    "source": "other",
+    "year": 2025,
+    "website": "https://www.google.com/search?q=Rocket+Coffeebar+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "bar"
+  },
+  {
+    "id": 68,
+    "name": "FABB Coffee Roasters",
+    "short": "咖啡烘焙与单品手冲",
+    "address": "Sukhumvit 49 Alley 1, Phrom Phong",
+    "lat": 13.731747,
+    "lng": 100.558306,
+    "source": "other",
+    "year": 2025,
+    "website": "https://www.google.com/search?q=FABB+Coffee+Roasters+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "cafe"
+  },
+  {
+    "id": 69,
+    "name": "Hands and Heart Bakery",
+    "short": "手工面包与精品咖啡",
+    "address": "Udomsuk 36, Bang Na",
+    "lat": 13.751535,
+    "lng": 100.535811,
+    "source": "other",
+    "year": 2025,
+    "website": "https://www.google.com/search?q=Hands+and+Heart+Bakery+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 70,
+    "name": "Café Chilli White",
+    "short": "泰式甜品与网红奶茶",
+    "address": "Soi Ari 4, Ari",
+    "lat": 13.785019,
+    "lng": 100.548325,
+    "source": "other",
+    "year": 2025,
+    "website": "https://www.google.com/search?q=Caf%C3%A9+Chilli+White+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 71,
+    "name": "The Never Ending Summer",
+    "short": "河畔风格泰式餐厅与甜点",
+    "address": "41/5 Charoenkrung Rd, Charoenkrung",
+    "lat": 13.72733,
+    "lng": 100.500226,
+    "source": "other",
+    "year": 2025,
+    "website": "https://www.google.com/search?q=The+Never+Ending+Summer+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 72,
+    "name": "Namsaah Bottling Trust",
+    "short": "复古粉红泰式料理与酒吧",
+    "address": "78/4-5 Convent Rd, Silom",
+    "lat": 13.729972,
+    "lng": 100.536227,
+    "source": "other",
+    "year": 2025,
+    "website": "https://www.google.com/search?q=Namsaah+Bottling+Trust+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 73,
+    "name": "Eat Me",
+    "short": "国际风味与现代美学餐厅",
+    "address": "20 Sathorn Soi 11, Sathorn",
+    "lat": 13.72731,
+    "lng": 100.535777,
+    "source": "other",
+    "year": 2025,
+    "website": "https://www.google.com/search?q=Eat+Me+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 74,
+    "name": "Blue Elephant",
+    "short": "经典泰式名厨餐厅",
+    "address": "233 S Sathorn Rd, Sathorn",
+    "lat": 13.724326,
+    "lng": 100.540928,
+    "source": "other",
+    "year": 2025,
+    "website": "https://www.google.com/search?q=Blue+Elephant+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 75,
+    "name": "Baan Khanitha",
+    "short": "泰式家常与古典餐饮",
+    "address": "36/1 Sukhumvit 23, Khlong Toei",
+    "lat": 13.735528,
+    "lng": 100.544042,
+    "source": "other",
+    "year": 2025,
+    "website": "https://www.google.com/search?q=Baan+Khanitha+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 76,
+    "name": "Thip Samai",
+    "short": "米其林必比登老牌泰式炒河粉",
+    "address": "313 Maha Chai Rd, Samran Rat",
+    "lat": 13.749273,
+    "lng": 100.537695,
+    "source": "2025-michelin,2026-michelin,2025-blackpearl",
+    "year": 2026,
+    "website": "https://www.google.com/search?q=Thip+Samai+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "restaurant"
+  },
+  {
+    "id": 77,
+    "name": "Somtum Der",
+    "short": "黑珍珠青木瓜沙拉名店",
+    "address": "5 Ekamai 10, Phra Khanong",
+    "lat": 13.730847,
+    "lng": 100.585368,
+    "source": "2024-blackpearl",
+    "year": 2026,
+    "website": "https://www.google.com/search?q=Somtum+Der+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "restaurant"
+  },
+  {
+    "id": 78,
+    "name": "Krua Apsorn",
+    "short": "家庭式泰国家常菜",
+    "address": "169 Dinso Rd, Phra Nakhon",
+    "lat": 13.756049,
+    "lng": 100.492628,
+    "source": "2024-blackpearl",
+    "year": 2026,
+    "website": "https://www.google.com/search?q=Krua+Apsorn+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "restaurant"
+  },
+  {
+    "id": 79,
+    "name": "Baan Ice Rice",
+    "short": "街头经典冰糯米饭小店",
+    "address": "1/1 Thanon Phra Arthit, Phra Nakhon",
+    "lat": 13.763527,
+    "lng": 100.488163,
+    "source": "other",
+    "year": 2026,
+    "website": "https://www.google.com/search?q=Baan+Ice+Rice+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 80,
+    "name": "Nai Mong Hoy Tod",
+    "short": "百年海鲜煎蚝煎饼",
+    "address": "79/7-8 Maha Chai Rd, Samran Rat",
+    "lat": 13.755468,
+    "lng": 100.547195,
+    "source": "2025-blackpearl",
+    "year": 2026,
+    "website": "https://www.google.com/search?q=Nai+Mong+Hoy+Tod+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "restaurant"
+  },
+  {
+    "id": 81,
+    "name": "Pee Aor Tom Yum Kung Noodle",
+    "short": "浓郁冬阴功大虾汤面",
+    "address": "68/8 Sukhumvit 55, Thonglor",
+    "lat": 13.740548,
+    "lng": 100.576899,
+    "source": "other",
+    "year": 2026,
+    "website": "https://www.google.com/search?q=Pee+Aor+Tom+Yum+Kung+Noodle+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "streetfood"
+  },
+  {
+    "id": 82,
+    "name": "Chote Chitr",
+    "short": "历史悠久泰式热菜馆",
+    "address": "146 Phraeng Phuton Rd, Phra Nakhon",
+    "lat": 13.761363,
+    "lng": 100.499165,
+    "source": "other",
+    "year": 2026,
+    "website": "https://www.google.com/search?q=Chote+Chitr+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 83,
+    "name": "Somboon Seafood",
+    "short": "知名海鲜咖喱蟹连锁",
+    "address": "895/9-10 Rama IV Rd, Silom",
+    "lat": 13.729639,
+    "lng": 100.548168,
+    "source": "2026-blackpearl",
+    "year": 2026,
+    "website": "https://www.google.com/search?q=Somboon+Seafood+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "restaurant"
+  },
+  {
+    "id": 84,
+    "name": "Suda Restaurant",
+    "short": "口碑泰国当地美食餐厅",
+    "address": "7/1 Rama IV Rd, Silom",
+    "lat": 13.728946,
+    "lng": 100.538818,
+    "source": "other",
+    "year": 2026,
+    "website": "https://www.google.com/search?q=Suda+Restaurant+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 85,
+    "name": "Baan Phad Thai",
+    "short": "泰式炒河粉经典老店",
+    "address": "68 Soi Phra Athit 44, Phra Nakhon",
+    "lat": 13.757484,
+    "lng": 100.500942,
+    "source": "other",
+    "year": 2026,
+    "website": "https://www.google.com/search?q=Baan+Phad+Thai+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 86,
+    "name": "Ka Nom Jeen Pa Lek",
+    "short": "老牌泰式米粉与咖喱",
+    "address": "5/1 Soi Phra Sumen 1, Phra Nakhon",
+    "lat": 13.752341,
+    "lng": 100.494113,
+    "source": "other",
+    "year": 2026,
+    "website": "https://www.google.com/search?q=Ka+Nom+Jeen+Pa+Lek+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 87,
+    "name": "Khao Gaeng Rang Nam",
+    "short": "知名泰式快餐米饭档",
+    "address": "409 Rang Nam Rd, Phaya Thai",
+    "lat": 13.765373,
+    "lng": 100.553031,
+    "source": "other",
+    "year": 2026,
+    "website": "https://www.google.com/search?q=Khao+Gaeng+Rang+Nam+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 88,
+    "name": "Soei",
+    "short": "米其林推荐泰式精致小馆",
+    "address": "101/1 Soi Sukhumvit 55, Thonglor",
+    "lat": 13.73492,
+    "lng": 100.587529,
+    "source": "2025-michelin,2026-michelin",
+    "year": 2026,
+    "website": "https://www.google.com/search?q=Soei+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "restaurant"
+  },
+  {
+    "id": 89,
+    "name": "Go Ang Pratunam",
+    "short": "米其林必比登船面",
+    "address": "100/1 Soi Petchaburi 19, Pratunam",
+    "lat": 13.753693,
+    "lng": 100.540066,
+    "source": "2023-michelin,2024-michelin",
+    "year": 2026,
+    "website": "https://www.google.com/search?q=Go+Ang+Pratunam+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "restaurant"
+  },
+  {
+    "id": 90,
+    "name": "Soi Polo Fried Chicken",
+    "short": "炸鸡与辣酱热门快餐",
+    "address": "253 Sukhumvit 21, Asoke",
+    "lat": 13.737285,
+    "lng": 100.556452,
+    "source": "other",
+    "year": 2026,
+    "website": "https://www.google.com/search?q=Soi+Polo+Fried+Chicken+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 91,
+    "name": "Ann Guay Tiew Kua Gai",
+    "short": "泰式鸡肉炒面风味",
+    "address": "31 Soi Ari 1, Ari",
+    "lat": 13.787487,
+    "lng": 100.552492,
+    "source": "other",
+    "year": 2026,
+    "website": "https://www.google.com/search?q=Ann+Guay+Tiew+Kua+Gai+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 92,
+    "name": "Pa Tong Ko",
+    "short": "经典油条与甜品摊",
+    "address": "Soi Mahadlekluang 2, Pathum Wan",
+    "lat": 13.754069,
+    "lng": 100.529291,
+    "source": "other",
+    "year": 2026,
+    "website": "https://www.google.com/search?q=Pa+Tong+Ko+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 93,
+    "name": "Wattanapanich Seafood",
+    "short": "本地人推荐海鲜餐厅",
+    "address": "152 Rama IV Rd, Silom",
+    "lat": 13.728905,
+    "lng": 100.538472,
+    "source": "other",
+    "year": 2026,
+    "website": "https://www.google.com/search?q=Wattanapanich+Seafood+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 94,
+    "name": "Khao Gaeng Manee",
+    "short": "家庭式泰式快餐米饭",
+    "address": "23 Sukhumvit 53, Phra Khanong",
+    "lat": 13.728826,
+    "lng": 100.590655,
+    "source": "other",
+    "year": 2026,
+    "website": "https://www.google.com/search?q=Khao+Gaeng+Manee+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 95,
+    "name": "The Local by Oamthong Thai Cuisine",
+    "short": "传统泰式料理与乡土风味",
+    "address": "718 Saladaeng Rd, Silom",
+    "lat": 13.725429,
+    "lng": 100.548404,
+    "source": "other",
+    "year": 2026,
+    "website": "https://www.google.com/search?q=The+Local+by+Oamthong+Thai+Cuisine+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 96,
+    "name": "Supanniga Eating Room",
+    "short": "米其林推荐泰式家常菜",
+    "address": "160/11 Sukhumvit 55, Thonglor",
+    "lat": 13.743409,
+    "lng": 100.591284,
+    "source": "2025-michelin,2026-michelin",
+    "year": 2026,
+    "website": "https://www.google.com/search?q=Supanniga+Eating+Room+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "restaurant"
+  },
+  {
+    "id": 97,
+    "name": "Khao",
+    "short": "泰式面点与创新小吃",
+    "address": "18 Sukhumvit 53, Phra Khanong",
+    "lat": 13.732926,
+    "lng": 100.588944,
+    "source": "other",
+    "year": 2026,
+    "website": "https://www.google.com/search?q=Khao+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 98,
+    "name": "Baan Matum",
+    "short": "泰式长桌风味街头小馆",
+    "address": "28 Sukhumvit 53, Phra Khanong",
+    "lat": 13.736157,
+    "lng": 100.585379,
+    "source": "other",
+    "year": 2026,
+    "website": "https://www.google.com/search?q=Baan+Matum+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 99,
+    "name": "Spice Market",
+    "short": "河畔泰式自助与海鲜料理",
+    "address": "190/1 Charoenkrung Rd, Charoenkrung",
+    "lat": 13.726313,
+    "lng": 100.506588,
+    "source": "other",
+    "year": 2026,
+    "website": "https://www.google.com/search?q=Spice+Market+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "other"
+  },
+  {
+    "id": 100,
+    "name": "Ayutthaya Boat Noodles",
+    "short": "经典泰式船面老店",
+    "address": "5/1 Phra Arthit Rd, Phra Nakhon",
+    "lat": 13.760257,
+    "lng": 100.490018,
+    "source": "other",
+    "year": 2026,
+    "website": "https://www.google.com/search?q=Ayutthaya+Boat+Noodles+%E6%9B%BC%E8%B0%B7",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "category": "streetfood"
+  },
+  {
+    "id": 101,
+    "name": "The Commons Thonglor",
+    "short": "文青社区美食聚落，曼谷最潮的露天美食广场",
+    "address": "335 Thonglor 17, Sukhumvit 55",
+    "lat": 13.7305,
+    "lng": 100.5795,
+    "category": "other",
+    "source": "other",
+    "website": "https://www.thecommonsbkk.com/",
+    "photos": [
+      "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80"
+    ],
+    "avgPrice": "THB 300-600",
+    "hours": "08:00-21:00"
+  },
+  {
+    "id": 102,
+    "name": "Factory Coffee",
+    "short": "曼谷冠军咖啡馆，创意咖啡与精致空间",
+    "address": "49 Phaya Thai Rd, Thung Phaya Thai",
+    "lat": 13.7567,
+    "lng": 100.5324,
+    "category": "cafe",
+    "source": "other",
+    "website": "https://www.factorycoffeebangkok.com/",
+    "photos": [
+      "https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?auto=format&fit=crop&w=800&q=80"
+    ],
+    "avgPrice": "THB 150-250",
+    "hours": "08:00-17:00"
+  },
+  {
+    "id": 103,
+    "name": "Roots Coffee",
+    "short": "曼谷精品咖啡 pioneer，自家烘焙",
+    "address": "The Commons, Thonglor 17",
+    "lat": 13.7303,
+    "lng": 100.5797,
+    "category": "cafe",
+    "source": "other",
+    "website": "https://www.rootsbkk.com/",
+    "photos": [
+      "https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=800&q=80"
+    ],
+    "avgPrice": "THB 120-200",
+    "hours": "08:00-18:00"
+  },
+  {
+    "id": 104,
+    "name": "Rocket Coffeebar",
+    "short": "北欧风咖啡馆，Brunch 与精品咖啡",
+    "address": "149 Sathorn Soi 12, Silom",
+    "lat": 13.7234,
+    "lng": 100.5256,
+    "category": "cafe",
+    "source": "other",
+    "website": "https://www.rocketcoffeebar.com/",
+    "photos": [
+      "https://images.unsplash.com/photo-1498804103079-a6351b050096?auto=format&fit=crop&w=800&q=80"
+    ],
+    "avgPrice": "THB 250-450",
+    "hours": "07:00-18:00"
+  },
+  {
+    "id": 105,
+    "name": "% Arabica Bangkok",
+    "short": "日本京都网红咖啡，极简美学空间",
+    "address": "The EmQuartier, Sukhumvit Rd",
+    "lat": 13.7312,
+    "lng": 100.5698,
+    "category": "cafe",
+    "source": "other",
+    "website": "https://arabica.coffee/",
+    "photos": [
+      "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?auto=format&fit=crop&w=800&q=80"
+    ],
+    "avgPrice": "THB 120-180",
+    "hours": "08:00-21:00"
+  },
+  {
+    "id": 106,
+    "name": "Toby's Cafe",
+    "short": "澳洲风 Brunch 咖啡馆，颜值与口味兼具",
+    "address": "75 Sukhumvit 38, Phra Khanong",
+    "lat": 13.7198,
+    "lng": 100.5742,
+    "category": "cafe",
+    "source": "other",
+    "website": "https://www.google.com/search?q=Toby%27s+Cafe+Bangkok",
+    "photos": [
+      "https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=800&q=80"
+    ],
+    "avgPrice": "THB 300-500",
+    "hours": "09:00-17:30"
+  },
+  {
+    "id": 107,
+    "name": "Jodd Fairs 乔德夜市",
+    "short": "曼谷最火夜市，火山排骨与水果西施",
+    "address": "Rama IX Rd, Huai Khwang",
+    "lat": 13.7589,
+    "lng": 100.5956,
+    "category": "streetfood",
+    "source": "other",
+    "website": "https://www.google.com/search?q=Jodd+Fairs+Bangkok",
+    "photos": [
+      "https://images.unsplash.com/photo-1533900298318-6b8da08a523e?auto=format&fit=crop&w=800&q=80"
+    ],
+    "avgPrice": "THB 100-300",
+    "hours": "16:00-00:00"
+  },
+  {
+    "id": 108,
+    "name": "Train Night Market Srinakarin",
+    "short": "席娜卡琳火车夜市，复古风情与地道小吃",
+    "address": "Srinakarin Rd, Nong Bon",
+    "lat": 13.6934,
+    "lng": 100.6487,
+    "category": "streetfood",
+    "source": "other",
+    "website": "https://www.google.com/search?q=Train+Night+Market+Srinakarin",
+    "photos": [
+      "https://images.unsplash.com/photo-1555126634-323283e090fa?auto=format&fit=crop&w=800&q=80"
+    ],
+    "avgPrice": "THB 80-250",
+    "hours": "17:00-01:00"
+  },
+  {
+    "id": 109,
+    "name": "Yaowarat 唐人街",
+    "short": "曼谷唐人街美食街，燕窝鱼翅与路边小吃",
+    "address": "Yaowarat Rd, Samphanthawong",
+    "lat": 13.7395,
+    "lng": 100.5123,
+    "category": "streetfood",
+    "source": "other",
+    "website": "https://www.google.com/search?q=Yaowarat+Chinatown+Bangkok+food",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80"
+    ],
+    "avgPrice": "THB 100-500",
+    "hours": "18:00-02:00"
+  },
+  {
+    "id": 110,
+    "name": "Thipsamai Pad Thai",
+    "short": "传奇泰式炒河粉店，米其林必比登推荐",
+    "address": "313 Mahachai Rd, Samran Rat",
+    "lat": 13.7521,
+    "lng": 100.5056,
+    "category": "streetfood",
+    "source": "other",
+    "website": "https://www.google.com/search?q=Thipsamai+Pad+Thai+Bangkok",
+    "photos": [
+      "https://images.unsplash.com/photo-1559314809-0d155014e29e?auto=format&fit=crop&w=800&q=80"
+    ],
+    "avgPrice": "THB 80-200",
+    "hours": "17:00-02:00"
+  },
+  {
+    "id": 111,
+    "name": "Raan Jay Fai 备用",
+    "short": "Jay Fai 的分店/相关档口",
+    "address": "327 Maha Chai Rd, Phra Nakhon",
+    "lat": 13.7523,
+    "lng": 100.5058,
+    "category": "streetfood",
+    "source": "other",
+    "website": "https://www.google.com/search?q=Jay+Fai+Bangkok",
+    "photos": [
+      "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=800&q=80"
+    ],
+    "avgPrice": "THB 500-1500",
+    "hours": "09:00-21:00"
+  },
+  {
+    "id": 112,
+    "name": "Sorn 备用",
+    "short": "南部泰式料理的另一种体验",
+    "address": "56 Sukhumvit 26, Khlong Tan",
+    "lat": 13.7345,
+    "lng": 100.5685,
+    "category": "restaurant",
+    "source": "other",
+    "website": "https://sornfinesouthern.com/",
+    "photos": [
+      "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80"
+    ],
+    "avgPrice": "THB 3000-5000",
+    "hours": "18:00-23:00"
+  },
+  {
+    "id": 113,
+    "name": "Social Club Rooftop Bar",
+    "short": "顶层酒吧，曼谷天际线与创意调酒",
+    "address": "No.1 Sukhumvit Soi 15, Klong Toey Nua",
+    "lat": 13.7456,
+    "lng": 100.5634,
+    "category": "bar",
+    "source": "other",
+    "website": "https://www.hyatt.com/en-US/hotel/thailand/park-hyatt-bangkok/bkkph/dining",
+    "photos": [
+      "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?auto=format&fit=crop&w=800&q=80"
+    ],
+    "avgPrice": "THB 400-800",
+    "hours": "17:00-01:00"
+  },
+  {
+    "id": 114,
+    "name": "Mahanakhon SkyBar",
+    "short": "泰国最高楼顶酒吧，360度城市景观",
+    "address": "King Power Mahanakhon, Silom",
+    "lat": 13.7238,
+    "lng": 100.5284,
+    "category": "bar",
+    "source": "other",
+    "website": "https://kingpowermahanakhon.co.th/skybar/",
+    "photos": [
+      "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
+    ],
+    "avgPrice": "THB 500-1000",
+    "hours": "17:00-01:00"
+  },
+  {
+    "id": 115,
+    "name": "Tropic City 备用",
+    "short": "热带风情鸡尾酒吧，亚洲前50",
+    "address": "672/65 Soi Charoen Krung 28, Bang Rak",
+    "lat": 13.7245,
+    "lng": 100.5295,
+    "category": "bar",
+    "source": "other",
+    "website": "https://www.google.com/search?q=Tropic+City+Bangkok",
+    "photos": [
+      "https://images.unsplash.com/photo-1572116469696-31de0f17cc34?auto=format&fit=crop&w=800&q=80"
+    ],
+    "avgPrice": "THB 300-600",
+    "hours": "18:00-01:00"
+  },
+  {
+    "id": 116,
+    "name": "Cactus Restaurant",
+    "short": "隐藏式地下酒吧， speakeasy 风格",
+    "address": "Yothi Rd, Si Yaek Maha Nak",
+    "lat": 13.7634,
+    "lng": 100.5378,
+    "category": "bar",
+    "source": "other",
+    "website": "https://www.google.com/search?q=Cactus+Bangkok+speakeasy",
+    "photos": [
+      "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=800&q=80"
+    ],
+    "avgPrice": "THB 350-700",
+    "hours": "19:00-02:00"
+  },
+  {
+    "id": 117,
+    "name": "Err Urban Rustic Thai",
+    "short": "Bo.lan 团队打造，传统泰式下酒菜",
+    "address": "394/35 Maharaj Rd, Phra Borom Maha Ratchawang",
+    "lat": 13.7445,
+    "lng": 100.4932,
+    "category": "restaurant",
+    "source": "other",
+    "website": "https://errbkk.com/",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80"
+    ],
+    "avgPrice": "THB 400-800",
+    "hours": "12:00-22:00"
+  },
+  {
+    "id": 118,
+    "name": "Soul Food Mahanakorn",
+    "short": "东南亚街头美食与精酿啤酒",
+    "address": "56/10 Sukhumvit Soi 55, Thonglor",
+    "lat": 13.7312,
+    "lng": 100.5834,
+    "category": "restaurant",
+    "source": "other",
+    "website": "https://www.soulfoodmahanakorn.com/",
+    "photos": [
+      "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
+    ],
+    "avgPrice": "THB 300-600",
+    "hours": "11:30-23:00"
+  },
+  {
+    "id": 119,
+    "name": "Sra Bua by Kiin Kiin",
+    "short": "分子料理泰餐，米其林一星",
+    "address": "991/9 Rama I Rd, Pathum Wan",
+    "lat": 13.7467,
+    "lng": 100.5345,
+    "category": "restaurant",
+    "source": "other",
+    "website": "https://www.kempinski.com/en/bangkok/siam-hotel/dining/sra-bua-by-kiin-kiin/",
+    "photos": [
+      "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=800&q=80"
+    ],
+    "avgPrice": "THB 2500-4000",
+    "hours": "12:00-14:30 / 18:00-22:30"
+  },
+  {
+    "id": 120,
+    "name": "Gaa Restaurant",
+    "short": "Gaggan 副线，印度与北欧融合料理",
+    "address": "68/1 Soi Langsuan, Lumpini",
+    "lat": 13.7312,
+    "lng": 100.5389,
+    "category": "restaurant",
+    "source": "other",
+    "website": "https://www.gaabangkok.com/",
+    "photos": [
+      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80"
+    ],
+    "avgPrice": "THB 3000-5000",
+    "hours": "18:00-23:00"
+  }
+];
+
+const categoryConfig = {
+  all: { label: '全部', color: '#0d6554' },
+  restaurant: { label: '餐厅', color: '#b08b4f' },
+  cafe: { label: '咖啡馆', color: '#1565c0' },
+  bar: { label: '酒吧', color: '#7b1fa2' },
+  streetfood: { label: '街头美食', color: '#e65100' },
+  other: { label: '本地推荐', color: '#836a55' }
+};
+
+const sourceLabels = { michelin: '米其林推荐', asia50: '亚洲前50榜', blackpearl: '黑珍珠榜', other: '本地推荐' };
+
+let state = {
+  search: '',
+  category: 'all',
+  showFav: false,
+  sort: 'default',
+  favs: JSON.parse(localStorage.getItem('bkk_favs') || '[]'),
+  userLoc: null,
+  activeId: null,
+  selected: null
+};
+
+let map = null;
+let markersLayer = null;
+let markersMap = new Map();
+let routeLayer = null; // Route planning line layer
+
+function getDistanceKm(lat1, lng1, lat2, lng2) {
+  const R = 6371;
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLng = (lng2 - lng1) * Math.PI / 180;
+  const a = Math.sin(dLat/2)**2 + Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+  return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+}
+
+function parseSource(source) {
+  if (!source) return [];
+  return String(source).split(',').map(s=>s.trim()).filter(Boolean).map(item=>{
+    const parts = item.split('-');
+    if (parts.length>1 && /^\d{4}$/.test(parts[0])) return { year: parts[0], base: parts.slice(1).join('-'), raw: item };
+    return { year: null, base: item, raw: item };
+  });
+}
+
+function formatSourceBadge(item) {
+  const label = sourceLabels[item.base] || item.base;
+  return item.year && item.base !== 'other' ? item.year + label : label;
+}
+
+function getBadgesHtml(place) {
+  const items = parseSource(place.source);
+  return items.map(item=>{
+    const color = item.base==='michelin'?'#b08b4f':item.base==='asia50'?'#1565c0':item.base==='blackpearl'?'#7b1fa2':'#d8b192';
+    const tc = item.base==='other'?'#4a3825':'white';
+    return `<span class="badge" style="background:${color};color:${tc}">${formatSourceBadge(item)}</span>`;
+  }).join('');
+}
+
+function toggleFav(id, e) {
+  if (e) e.stopPropagation();
+  const set = new Set(state.favs);
+  if (set.has(id)) set.delete(id); else set.add(id);
+  state.favs = Array.from(set);
+  localStorage.setItem('bkk_favs', JSON.stringify(state.favs));
+  render();
+}
+
+function filterPlaces() {
+  let list = [...PLACES];
+  const s = state.search.trim().toLowerCase();
+  if (s) list = list.filter(p => (p.name+' '+p.short+' '+p.address).toLowerCase().includes(s));
+  if (state.category !== 'all') list = list.filter(p => p.category === state.category);
+  if (state.showFav) list = list.filter(p => state.favs.includes(p.id));
+  if (state.sort === 'distance' && state.userLoc) {
+    list = list.map(p => ({...p, _dist: getDistanceKm(state.userLoc.lat, state.userLoc.lng, p.lat, p.lng)})).sort((a,b)=>a._dist-b._dist);
+  } else if (state.sort === 'name') {
+    list = list.sort((a,b) => a.name.localeCompare(b.name));
+  }
+  return list;
+}
+
+function drawRoute(place) {
+  if (routeLayer) { map.removeLayer(routeLayer); routeLayer = null; }
+  if (!state.userLoc || !place.lat || !place.lng) return;
+  routeLayer = L.layerGroup().addTo(map);
+  // Draw dashed line from user location to place
+  const latlngs = [
+    [state.userLoc.lat, state.userLoc.lng],
+    [place.lat, place.lng]
+  ];
+  L.polyline(latlngs, {
+    color: '#c59b5a',
+    weight: 3,
+    opacity: 0.8,
+    dashArray: '8, 8',
+    lineCap: 'round'
+  }).addTo(routeLayer);
+  // Add user location marker
+  L.circleMarker([state.userLoc.lat, state.userLoc.lng], {
+    radius: 6,
+    fillColor: '#1565c0',
+    color: '#fff',
+    weight: 2,
+    opacity: 1,
+    fillOpacity: 0.9
+  }).bindTooltip('您的位置', {direction: 'top', offset: [0, -6]}).addTo(routeLayer);
+}
+
+function clearRoute() {
+  if (routeLayer) { map.removeLayer(routeLayer); routeLayer = null; }
+}
+
+function openDetail(place) {
+  state.selected = place;
+  state.activeId = place.id;
+  currentPhotoIndex = 0;
+  render();
+  drawRoute(place);
+  const ov = document.getElementById('detailOverlay');
+  const dist = state.userLoc ? getDistanceKm(state.userLoc.lat, state.userLoc.lng, place.lat, place.lng) : null;
+  const distStr = dist ? (dist < 1 ? `${(dist*1000).toFixed(0)} 米` : `${dist.toFixed(1)} 公里`) : '';
+  const photos = place.photos || [];
+  const isFav = state.favs.includes(place.id);
+
+  // Build photo gallery HTML
+  let galleryHtml = '';
+  if (photos.length > 0) {
+    galleryHtml = `
+      <div style="position:relative;width:100%;height:220px;overflow:hidden;border-radius:32px 32px 0 0;background:#f4efe6;">
+        <img id="detailPhoto" src="${photos[0]}" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        ${photos.length > 1 ? `
+          <button onclick="prevPhoto(${place.id})" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);width:32px;height:32px;border-radius:50%;border:none;background:rgba(0,0,0,0.4);color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;">‹</button>
+          <button onclick="nextPhoto(${place.id})" style="position:absolute;right:12px;top:50%;transform:translateY(-50%);width:32px;height:32px;border-radius:50%;border:none;background:rgba(0,0,0,0.4);color:#fff;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;">›</button>
+          <div id="photoCounter" style="position:absolute;bottom:12px;left:50%;transform:translateX(-50%);background:rgba(0,0,0,0.35);color:#fff;padding:4px 12px;border-radius:999px;font-size:12px;">1 / ${photos.length}</div>
+        ` : ''}
+      </div>
+    `;
+  }
+
+  ov.innerHTML = `
+    <div class="detail-modal" data-place-id="${place.id}">
+      ${galleryHtml}
+      <button class="close-btn" onclick="closeDetail()">✕</button>
+      <div class="content">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px;">
+          <div style="flex:1;min-width:0;">
+            <h2 style="word-break:break-word;">${place.name}</h2>
+            ${place.short ? `<p style="margin-top:8px;color:#716054;font-size:14px;line-height:1.6;">${place.short}</p>` : ''}
+          </div>
+          <button class="fav-star ${isFav?'active':''}" onclick="toggleFav(${place.id});event.stopPropagation();" style="font-size:24px;flex-shrink:0;">${isFav?'★':'☆'}</button>
+        </div>
+        <div style="margin-top:14px;display:flex;flex-wrap:wrap;gap:6px;">${getBadgesHtml(place)}${place.category && place.category!=='other' ? `<span class="badge badge-cat">${categoryConfig[place.category]?.label||place.category}</span>` : ''}</div>
+        <div class="info-block">
+          ${place.address ? `<div class="info-row"><span class="icon">📍</span><div><div class="label">地址</div><div class="value">${place.address}</div></div></div>` : ''}
+          ${distStr ? `<div class="info-row"><span class="icon">🧭</span><div><div class="label">距离</div><div class="value">${distStr}</div></div></div>` : ''}
+          ${place.hours ? `<div class="info-row"><span class="icon">🕒</span><div><div class="label">营业时间</div><div class="value">${place.hours}</div></div></div>` : ''}
+          ${place.phone ? `<div class="info-row"><span class="icon">📞</span><div><div class="label">电话</div><div class="value">${place.phone}</div></div></div>` : ''}
+          ${place.avgPrice ? `<div class="info-row"><span class="icon">💰</span><div><div class="label">人均消费</div><div class="value">${place.avgPrice}</div></div></div>` : ''}
+        </div>
+        <div class="actions">
+          ${place.website ? `<a href="${place.website}" target="_blank" rel="noreferrer" class="btn-primary">访问官网 / 预约</a>` : ''}
+          <a href="https://www.google.com/maps/search/?api=1&query=${place.lat},${place.lng}" target="_blank" rel="noreferrer" class="btn-secondary">地图导航</a>
+        </div>
+      </div>
+    </div>
+  `;
+  ov.style.display = 'flex';
+  if (map && place.lat && place.lng) map.setView([place.lat, place.lng], 15, {animate:true});
+  // Scroll list to active card
+  setTimeout(() => {
+    const activeCard = document.querySelector('.place-card.active');
+    if (activeCard) activeCard.scrollIntoView({behavior: 'smooth', block: 'nearest'});
+  }, 50);
+}
+
+let currentPhotoIndex = 0;
+function nextPhoto(placeId) {
+  const place = PLACES.find(p => p.id === placeId);
+  if (!place || !place.photos || place.photos.length <= 1) return;
+  currentPhotoIndex = (currentPhotoIndex + 1) % place.photos.length;
+  const img = document.getElementById('detailPhoto');
+  const counter = document.getElementById('photoCounter');
+  if (img) img.src = place.photos[currentPhotoIndex];
+  if (counter) counter.textContent = `${currentPhotoIndex + 1} / ${place.photos.length}`;
+}
+function prevPhoto(placeId) {
+  const place = PLACES.find(p => p.id === placeId);
+  if (!place || !place.photos || place.photos.length <= 1) return;
+  currentPhotoIndex = (currentPhotoIndex - 1 + place.photos.length) % place.photos.length;
+  const img = document.getElementById('detailPhoto');
+  const counter = document.getElementById('photoCounter');
+  if (img) img.src = place.photos[currentPhotoIndex];
+  if (counter) counter.textContent = `${currentPhotoIndex + 1} / ${place.photos.length}`;
+}
+
+function closeDetail() {
+  document.getElementById('detailOverlay').style.display = 'none';
+  state.selected = null;
+  state.activeId = null;
+  currentPhotoIndex = 0;
+  clearRoute();
+  render();
+}
+
+function clickCard(place) {
+  state.activeId = place.id;
+  openDetail(place);
+}
+
+function render() {
+  const list = filterPlaces();
+  document.getElementById('statsCount').textContent = `${list.length} / ${PLACES.length}`;
+  document.getElementById('favCount').textContent = state.favs.length ? `(${state.favs.length})` : '';
+  document.getElementById('placeList').innerHTML = list.map(p => {
+    const isFav = state.favs.includes(p.id);
+    const dist = p._dist ? (p._dist < 1 ? `${(p._dist*1000).toFixed(0)}m` : `${p._dist.toFixed(1)}km`) : '';
+    return `
+      <div class="place-card ${state.activeId===p.id?'active':''}" onclick="clickCard(PLACES.find(x=>x.id===${p.id}))">
+        <div class="header">
+          <div>
+            <h3>${p.name} ${dist?`<span style="font-size:12px;color:#8a6f51;font-weight:400;">${dist}</span>`:''}</h3>
+          </div>
+          <button class="fav-star ${isFav?'active':''}" onclick="toggleFav(${p.id},event)">${isFav?'★':'☆'}</button>
+        </div>
+        <p class="desc">${p.short || ''}</p>
+        <div class="badges">${getBadgesHtml(p)}${p.category && p.category!=='other' ? `<span class="badge badge-cat">${categoryConfig[p.category]?.label||p.category}</span>` : ''}</div>
+        <div class="meta"><span>${p.address || ''}</span><span>#${p.id}</span></div>
+      </div>
+    `;
+  }).join('');
+  renderMapMarkers();
+}
+
+function renderMapMarkers() {
+  if (!map) return;
+  const list = filterPlaces();
+  if (markersLayer) { map.removeLayer(markersLayer); markersMap.clear(); }
+  markersLayer = L.layerGroup().addTo(map);
+  list.forEach(p => {
+    if (!p.lat || !p.lng) return;
+    const isActive = state.activeId === p.id;
+    const color = categoryConfig[p.category]?.color || categoryConfig.other.color;
+    const size = isActive ? 36 : 28;
+    const anchor = isActive ? 18 : 14;
+    const icon = L.divIcon({
+      className: 'custom-icon ' + (isActive ? 'custom-icon-active' : ''),
+      html: isActive
+        ? `<div style="position:relative;width:${size}px;height:${size}px;"><div class="pulse-ring" style="background:${color};"></div><div class="custom-icon-inner" style="background:${color};width:${size}px;height:${size}px;"></div></div>`
+        : `<div class="custom-icon-inner" style="background:${color};"></div>`,
+      iconSize: [size, size],
+      iconAnchor: [anchor, anchor],
+      popupAnchor: [0, -anchor]
+    });
+    const m = L.marker([p.lat, p.lng], {icon}).addTo(markersLayer);
+    m.bindTooltip(p.name, {direction: 'top', offset: [0, -anchor]});
+    // Click marker → open detail panel
+    m.on('click', () => {
+      state.activeId = p.id;
+      openDetail(p);
+    });
+    markersMap.set(String(p.id), m);
+  });
+}
+
+function init() {
+  map = L.map('map', {center: [13.7563, 100.5018], zoom: 12, zoomControl: false});
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '&copy; OpenStreetMap', maxZoom: 19}).addTo(map);
+  L.control.zoom({position: 'bottomright'}).addTo(map);
+
+  // Click on map blank area → deselect
+  map.on('click', (e) => {
+    if (e.originalEvent.target.closest('.leaflet-marker-icon')) return;
+    state.activeId = null;
+    state.selected = null;
+    closeDetail();
+    render();
+  });
+
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(pos=>{
+      state.userLoc = {lat: pos.coords.latitude, lng: pos.coords.longitude};
+      render();
+    }, ()=>{});
+  }
+
+  document.getElementById('searchInput').addEventListener('input', e=>{ state.search = e.target.value; render(); });
+  document.getElementById('sortSelect').addEventListener('change', e=>{ state.sort = e.target.value; render(); });
+  document.getElementById('favToggle').addEventListener('click', ()=>{ state.showFav = !state.showFav; document.getElementById('favToggle').classList.toggle('active', state.showFav); render(); });
+
+  document.getElementById('categoryFilters').addEventListener('click', e=>{
+    if (!e.target.classList.contains('filter-btn')) return;
+    document.querySelectorAll('#categoryFilters .filter-btn').forEach(b=>{ b.classList.remove('active'); b.style.background=''; b.style.color=''; });
+    e.target.classList.add('active');
+    e.target.style.background = categoryConfig[e.target.dataset.cat]?.color || '#0d6554';
+    e.target.style.color = 'white';
+    state.category = e.target.dataset.cat;
+    render();
+  });
+
+  // Set initial active category color
+  document.querySelector('[data-cat="all"]').style.background = categoryConfig.all.color;
+  document.querySelector('[data-cat="all"]').style.color = 'white';
+
+  document.addEventListener('keydown', e=>{ if (e.key==='Escape') closeDetail(); });
+
+  // Click overlay background to close detail
+  document.getElementById('detailOverlay').addEventListener('click', (e) => {
+    if (e.target === e.currentTarget) closeDetail();
+  });
+
+  render();
+}
+
+init();
+</script>
+</body>
 </html>
