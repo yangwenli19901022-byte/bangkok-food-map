@@ -30,7 +30,7 @@ const defaultMarkers = [
     "lng": 100.530721,
     "source": "2025-michelin,2026-michelin,2026-asia50",
     "year": 2023,
-    "website": "https://www.suhring.com/",
+    "website": "https://restaurantsuhring.com/",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80"
     ],
@@ -64,7 +64,7 @@ const defaultMarkers = [
     "lng": 100.532354,
     "source": "2024-michelin,2025-michelin",
     "year": 2023,
-    "website": "https://www.google.com/search?q=Nahm+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.comohotels.com/thailand/como-metropolitan-bangkok/dining/nahm",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -112,7 +112,6 @@ const defaultMarkers = [
     "lng": 100.537656,
     "source": "2023-michelin,2024-michelin",
     "year": 2023,
-    "website": "https://www.google.com/search?q=Jay+Fai+%E6%9B%BC%E8%B0%B7",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -144,7 +143,7 @@ const defaultMarkers = [
     "lng": 100.589146,
     "source": "other",
     "year": 2023,
-    "website": "https://www.google.com/search?q=80%2F20+%E6%9B%BC%E8%B0%B7",
+    "website": "https://8020bkk.com/",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -160,7 +159,7 @@ const defaultMarkers = [
     "lng": 100.580298,
     "source": "2023-asia50",
     "year": 2023,
-    "website": "https://www.google.com/search?q=Canvas+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.canvasbangkok.com/",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -176,7 +175,7 @@ const defaultMarkers = [
     "lng": 100.544434,
     "source": "other",
     "year": 2023,
-    "website": "https://www.google.com/search?q=Aksorn+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.aksornbkk.com/",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -192,7 +191,7 @@ const defaultMarkers = [
     "lng": 100.555367,
     "source": "other",
     "year": 2023,
-    "website": "https://www.google.com/search?q=Saneh+Jaan+%E6%9B%BC%E8%B0%B7",
+    "website": "https://sanehjaan.com/",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -208,7 +207,7 @@ const defaultMarkers = [
     "lng": 100.570255,
     "source": "2025-asia50",
     "year": 2023,
-    "website": "https://www.google.com/search?q=Elements+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.okurabangkok.com/dining/elements-inspired-by-ciel-bleu",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -224,7 +223,7 @@ const defaultMarkers = [
     "lng": 100.520099,
     "source": "2024-michelin,2025-michelin",
     "year": 2023,
-    "website": "https://www.google.com/search?q=Le+Normandie+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.mandarinoriental.com/bangkok/chao-phraya-river/dine/le-normandie",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -240,7 +239,6 @@ const defaultMarkers = [
     "lng": 100.584564,
     "source": "other",
     "year": 2023,
-    "website": "https://www.google.com/search?q=Aaharn+%E6%9B%BC%E8%B0%B7",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -256,7 +254,7 @@ const defaultMarkers = [
     "lng": 100.541025,
     "source": "2024-michelin,2025-michelin",
     "year": 2023,
-    "website": "https://www.google.com/search?q=Savelberg+Bangkok+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.savelbergth.com/",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -272,7 +270,7 @@ const defaultMarkers = [
     "lng": 100.54249,
     "source": "2023-michelin,2024-michelin",
     "year": 2023,
-    "website": "https://www.google.com/search?q=Issaya+Siamese+Club+%E6%9B%BC%E8%B0%B7",
+    "website": "http://www.issaya.com/",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -288,7 +286,7 @@ const defaultMarkers = [
     "lng": 100.580198,
     "source": "other",
     "year": 2023,
-    "website": "https://www.google.com/search?q=Bunker+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.bunkerbkk.com/",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -304,7 +302,6 @@ const defaultMarkers = [
     "lng": 100.536022,
     "source": "other",
     "year": 2023,
-    "website": "https://www.google.com/search?q=Dala+%E6%9B%BC%E8%B0%B7",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -320,7 +317,6 @@ const defaultMarkers = [
     "lng": 100.568401,
     "source": "other",
     "year": 2023,
-    "website": "https://www.google.com/search?q=Babette%27s+The+Steakhouse+%E6%9B%BC%E8%B0%B7",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -336,7 +332,7 @@ const defaultMarkers = [
     "lng": 100.522418,
     "source": "other",
     "year": 2023,
-    "website": "https://www.google.com/search?q=The+Bamboo+Bar+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.mandarinoriental.com/bangkok/chao-phraya-river/dine/the-bamboo-bar",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -352,7 +348,7 @@ const defaultMarkers = [
     "lng": 100.502578,
     "source": "2023-asia50",
     "year": 2023,
-    "website": "https://www.google.com/search?q=Tropic+City+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.tropiccitybkk.com/",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -368,7 +364,7 @@ const defaultMarkers = [
     "lng": 100.516656,
     "source": "other",
     "year": 2023,
-    "website": "https://www.google.com/search?q=Teens+of+Thailand+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.facebook.com/teensofthailand/",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -384,7 +380,7 @@ const defaultMarkers = [
     "lng": 100.560303,
     "source": "other",
     "year": 2023,
-    "website": "https://www.google.com/search?q=Backstage+Cocktail+Bar+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.facebook.com/backstagecocktailbar/",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -400,7 +396,7 @@ const defaultMarkers = [
     "lng": 100.588421,
     "source": "other",
     "year": 2023,
-    "website": "https://www.google.com/search?q=Rabbit+Hole+%E6%9B%BC%E8%B0%B7",
+    "website": "https://rabbitholebkk.com/",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -416,7 +412,7 @@ const defaultMarkers = [
     "lng": 100.564776,
     "source": "other",
     "year": 2024,
-    "website": "https://www.google.com/search?q=Iron+Balls+Distillery+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.ironballsth.com/",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -432,7 +428,7 @@ const defaultMarkers = [
     "lng": 100.536052,
     "source": "other",
     "year": 2024,
-    "website": "https://www.google.com/search?q=Vesper+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.vesperbar.co/",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -448,7 +444,7 @@ const defaultMarkers = [
     "lng": 100.49893,
     "source": "other",
     "year": 2024,
-    "website": "https://www.google.com/search?q=Asia+Today+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.facebook.com/asiatodaybar/",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -464,7 +460,7 @@ const defaultMarkers = [
     "lng": 100.536835,
     "source": "other",
     "year": 2024,
-    "website": "https://www.google.com/search?q=Smalls+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.smallss.net/",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -480,7 +476,7 @@ const defaultMarkers = [
     "lng": 100.578775,
     "source": "other",
     "year": 2024,
-    "website": "https://www.google.com/search?q=J.Boroski+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.jboroski.com/",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -496,7 +492,7 @@ const defaultMarkers = [
     "lng": 100.511733,
     "source": "other",
     "year": 2024,
-    "website": "https://www.google.com/search?q=TEP+BAR+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.facebook.com/tepbarbkk/",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -512,7 +508,7 @@ const defaultMarkers = [
     "lng": 100.535091,
     "source": "other",
     "year": 2024,
-    "website": "https://www.google.com/search?q=The+Locker+Room+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.thelockerroombkk.com/",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -528,7 +524,7 @@ const defaultMarkers = [
     "lng": 100.533656,
     "source": "other",
     "year": 2024,
-    "website": "https://www.google.com/search?q=The+House+on+Sathorn+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.thehouseonsathorn.com/",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -544,7 +540,7 @@ const defaultMarkers = [
     "lng": 100.540234,
     "source": "other",
     "year": 2024,
-    "website": "https://www.google.com/search?q=The+Bar+Upstairs+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.thebarupstairsbkk.com/",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -560,7 +556,7 @@ const defaultMarkers = [
     "lng": 100.547586,
     "source": "other",
     "year": 2024,
-    "website": "https://www.google.com/search?q=Sky+Bar+Lebua+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.lebua.com/sky-bar/",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -576,7 +572,7 @@ const defaultMarkers = [
     "lng": 100.544373,
     "source": "other",
     "year": 2024,
-    "website": "https://www.google.com/search?q=Moon+Bar+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.banyantree.com/thailand/bangkok/dining/moon-bar",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -592,7 +588,7 @@ const defaultMarkers = [
     "lng": 100.581823,
     "source": "other",
     "year": 2024,
-    "website": "https://www.google.com/search?q=Octave+Rooftop+Lounge+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.marriott.com/hotels/hotel-information/restaurant/bkkos-octave-marriott-hotel-sukhumvit/",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -608,7 +604,7 @@ const defaultMarkers = [
     "lng": 100.536259,
     "source": "other",
     "year": 2024,
-    "website": "https://www.google.com/search?q=Above+Eleven+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.aboveeleven.com/",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -624,7 +620,7 @@ const defaultMarkers = [
     "lng": 100.530073,
     "source": "other",
     "year": 2024,
-    "website": "https://www.google.com/search?q=Vertigo+Too+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.banyantree.com/thailand/bangkok/dining/vertigo-and-moon-bar",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -640,7 +636,7 @@ const defaultMarkers = [
     "lng": 100.546487,
     "source": "other",
     "year": 2024,
-    "website": "https://www.google.com/search?q=HI-SO+Bar+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.sofitel.com/en/hotels/sofitel-bangkok-sukhumvit/restaurant-spa/hi-so-bar",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -656,7 +652,7 @@ const defaultMarkers = [
     "lng": 100.548014,
     "source": "other",
     "year": 2024,
-    "website": "https://www.google.com/search?q=Mahanakhon+SkyBar+%E6%9B%BC%E8%B0%B7",
+    "website": "https://kingpowermahanakhon.co.th/skybar/",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -672,7 +668,7 @@ const defaultMarkers = [
     "lng": 100.542288,
     "source": "other",
     "year": 2024,
-    "website": "https://www.google.com/search?q=Scarlett+Wine+Bar+%E6%9B%BC%E8%B0%B7",
+    "website": "https://scarlettbangkok.com/",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -688,7 +684,7 @@ const defaultMarkers = [
     "lng": 100.536517,
     "source": "other",
     "year": 2024,
-    "website": "https://www.google.com/search?q=ThreeSixty+Rooftop+Bar+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.millenniumhotels.com/en/bangkok/banyan-tree-bangkok/dining/threesixty-lounge.html",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -704,7 +700,7 @@ const defaultMarkers = [
     "lng": 100.53975,
     "source": "other",
     "year": 2024,
-    "website": "https://www.google.com/search?q=Red+Sky+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.centara.com/centarahotelsresorts/centralworld/dining/bars-lounges/red-sky",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -720,7 +716,7 @@ const defaultMarkers = [
     "lng": 100.536056,
     "source": "2024-asia50",
     "year": 2024,
-    "website": "https://www.google.com/search?q=C%C3%89+LA+VI+%E6%9B%BC%E8%B0%B7",
+    "website": "https://bangkok.celavi.com/",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -736,7 +732,7 @@ const defaultMarkers = [
     "lng": 100.555232,
     "source": "other",
     "year": 2024,
-    "website": "https://www.google.com/search?q=Mikkeller+Bangkok+%E6%9B%BC%E8%B0%B7",
+    "website": "https://mikkeller.dk/",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -752,7 +748,7 @@ const defaultMarkers = [
     "lng": 100.577903,
     "source": "other",
     "year": 2024,
-    "website": "https://www.google.com/search?q=Iron+Fairies+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.ironfairies.com/",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -768,7 +764,7 @@ const defaultMarkers = [
     "lng": 100.547737,
     "source": "other",
     "year": 2024,
-    "website": "https://www.google.com/search?q=Q+Bar+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.facebook.com/qbarbangkok/",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -784,7 +780,7 @@ const defaultMarkers = [
     "lng": 100.577569,
     "source": "other",
     "year": 2024,
-    "website": "https://www.google.com/search?q=Hair+of+the+Dog+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.facebook.com/hairofthedogbangkok/",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -800,7 +796,7 @@ const defaultMarkers = [
     "lng": 100.540671,
     "source": "other",
     "year": 2024,
-    "website": "https://www.google.com/search?q=Forbidden+City+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.facebook.com/forbiddencitybkk/",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -816,7 +812,7 @@ const defaultMarkers = [
     "lng": 100.529728,
     "source": "other",
     "year": 2025,
-    "website": "https://www.google.com/search?q=The+Speakeasy+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.hotelmusebangkok.com/dining/the-speakeasy/",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -832,7 +828,7 @@ const defaultMarkers = [
     "lng": 100.542421,
     "source": "other",
     "year": 2025,
-    "website": "https://www.google.com/search?q=Hemingway%27s+Bangkok+%E6%9B%BC%E8%B0%B7",
+    "website": "https://hemingwaysbkk.com/",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -848,7 +844,7 @@ const defaultMarkers = [
     "lng": 100.543438,
     "source": "other",
     "year": 2025,
-    "website": "https://www.google.com/search?q=L%27Atelier+de+Jo%C3%ABl+Robuchon+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.robuchon.hk/",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -864,7 +860,6 @@ const defaultMarkers = [
     "lng": 100.57169,
     "source": "other",
     "year": 2025,
-    "website": "https://www.google.com/search?q=Maison+Jean+Philippe+%E6%9B%BC%E8%B0%B7",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -880,7 +875,7 @@ const defaultMarkers = [
     "lng": 100.577741,
     "source": "other",
     "year": 2025,
-    "website": "https://www.google.com/search?q=Roast+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.roastbkk.com/",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -896,7 +891,7 @@ const defaultMarkers = [
     "lng": 100.571934,
     "source": "other",
     "year": 2025,
-    "website": "https://www.google.com/search?q=Casa+Lapin+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.facebook.com/casalapin/",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -912,7 +907,7 @@ const defaultMarkers = [
     "lng": 100.579179,
     "source": "2024-asia50",
     "year": 2025,
-    "website": "https://www.google.com/search?q=One+Ounce+for+Onion+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.facebook.com/oneounceforonion/",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -928,7 +923,7 @@ const defaultMarkers = [
     "lng": 100.566043,
     "source": "other",
     "year": 2025,
-    "website": "https://www.google.com/search?q=Toby%27s+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.tobys.co.th/",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -944,7 +939,7 @@ const defaultMarkers = [
     "lng": 100.567288,
     "source": "other",
     "year": 2025,
-    "website": "https://www.google.com/search?q=Roots+Handmade+Coffee+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.rootsbkk.com/",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -960,7 +955,7 @@ const defaultMarkers = [
     "lng": 100.584459,
     "source": "other",
     "year": 2025,
-    "website": "https://www.google.com/search?q=Caf%C3%A9+Tartine+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.cafetartinebkk.com/",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -976,7 +971,7 @@ const defaultMarkers = [
     "lng": 100.535542,
     "source": "other",
     "year": 2025,
-    "website": "https://www.google.com/search?q=Audrey+Caf%C3%A9+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.audrey-cafe.com/",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -992,7 +987,7 @@ const defaultMarkers = [
     "lng": 100.538637,
     "source": "other",
     "year": 2025,
-    "website": "https://www.google.com/search?q=After+You+Dessert+Cafe+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.afteryoudessertcafe.com/",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -1008,7 +1003,7 @@ const defaultMarkers = [
     "lng": 100.556446,
     "source": "other",
     "year": 2025,
-    "website": "https://www.google.com/search?q=Mont+Nom+Sod+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.facebook.com/montnomsod/",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -1024,7 +1019,7 @@ const defaultMarkers = [
     "lng": 100.538823,
     "source": "other",
     "year": 2025,
-    "website": "https://www.google.com/search?q=Mae+Varee+Mango+Sticky+Rice+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.facebook.com/maevaree/",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -1040,7 +1035,7 @@ const defaultMarkers = [
     "lng": 100.561871,
     "source": "other",
     "year": 2025,
-    "website": "https://www.google.com/search?q=Coffee+Beans+by+Dao+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.coffeebeansbydao.com/",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -1056,7 +1051,7 @@ const defaultMarkers = [
     "lng": 100.548486,
     "source": "other",
     "year": 2025,
-    "website": "https://www.google.com/search?q=Gallery+Drip+Coffee+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.facebook.com/gallerydripcoffee/",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -1072,7 +1067,7 @@ const defaultMarkers = [
     "lng": 100.565581,
     "source": "other",
     "year": 2025,
-    "website": "https://www.google.com/search?q=Rocket+Coffeebar+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.rocketcoffeebar.com/",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -1088,7 +1083,7 @@ const defaultMarkers = [
     "lng": 100.558306,
     "source": "other",
     "year": 2025,
-    "website": "https://www.google.com/search?q=FABB+Coffee+Roasters+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.facebook.com/fabbcoffeeroasters/",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -1104,7 +1099,7 @@ const defaultMarkers = [
     "lng": 100.535811,
     "source": "other",
     "year": 2025,
-    "website": "https://www.google.com/search?q=Hands+and+Heart+Bakery+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.facebook.com/handsandheartcoffee/",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -1120,7 +1115,7 @@ const defaultMarkers = [
     "lng": 100.548325,
     "source": "other",
     "year": 2025,
-    "website": "https://www.google.com/search?q=Caf%C3%A9+Chilli+White+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.facebook.com/cafechilli/",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -1136,7 +1131,7 @@ const defaultMarkers = [
     "lng": 100.500226,
     "source": "other",
     "year": 2025,
-    "website": "https://www.google.com/search?q=The+Never+Ending+Summer+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.facebook.com/theneverendingsummerbkk/",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -1152,7 +1147,7 @@ const defaultMarkers = [
     "lng": 100.536227,
     "source": "other",
     "year": 2025,
-    "website": "https://www.google.com/search?q=Namsaah+Bottling+Trust+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.facebook.com/namsaahbottlingtrust/",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -1168,7 +1163,7 @@ const defaultMarkers = [
     "lng": 100.535777,
     "source": "other",
     "year": 2025,
-    "website": "https://www.google.com/search?q=Eat+Me+%E6%9B%BC%E8%B0%B7",
+    "website": "https://eatmerestaurant.com/",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -1184,7 +1179,7 @@ const defaultMarkers = [
     "lng": 100.540928,
     "source": "other",
     "year": 2025,
-    "website": "https://www.google.com/search?q=Blue+Elephant+%E6%9B%BC%E8%B0%B7",
+    "website": "https://blueelephant.com/restaurant/bangkok/",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -1200,7 +1195,7 @@ const defaultMarkers = [
     "lng": 100.544042,
     "source": "other",
     "year": 2025,
-    "website": "https://www.google.com/search?q=Baan+Khanitha+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.baan-khanitha.com/",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -1216,7 +1211,7 @@ const defaultMarkers = [
     "lng": 100.537695,
     "source": "2025-michelin,2026-michelin,2025-blackpearl",
     "year": 2026,
-    "website": "https://www.google.com/search?q=Thip+Samai+%E6%9B%BC%E8%B0%B7",
+    "website": "https://thipsamai.com/",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -1232,7 +1227,7 @@ const defaultMarkers = [
     "lng": 100.585368,
     "source": "2024-blackpearl",
     "year": 2026,
-    "website": "https://www.google.com/search?q=Somtum+Der+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.somtumder.com/",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -1248,7 +1243,6 @@ const defaultMarkers = [
     "lng": 100.492628,
     "source": "2024-blackpearl",
     "year": 2026,
-    "website": "https://www.google.com/search?q=Krua+Apsorn+%E6%9B%BC%E8%B0%B7",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -1264,7 +1258,6 @@ const defaultMarkers = [
     "lng": 100.488163,
     "source": "other",
     "year": 2026,
-    "website": "https://www.google.com/search?q=Baan+Ice+Rice+%E6%9B%BC%E8%B0%B7",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -1280,7 +1273,6 @@ const defaultMarkers = [
     "lng": 100.547195,
     "source": "2025-blackpearl",
     "year": 2026,
-    "website": "https://www.google.com/search?q=Nai+Mong+Hoy+Tod+%E6%9B%BC%E8%B0%B7",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -1296,7 +1288,6 @@ const defaultMarkers = [
     "lng": 100.576899,
     "source": "other",
     "year": 2026,
-    "website": "https://www.google.com/search?q=Pee+Aor+Tom+Yum+Kung+Noodle+%E6%9B%BC%E8%B0%B7",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -1312,7 +1303,6 @@ const defaultMarkers = [
     "lng": 100.499165,
     "source": "other",
     "year": 2026,
-    "website": "https://www.google.com/search?q=Chote+Chitr+%E6%9B%BC%E8%B0%B7",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -1328,7 +1318,7 @@ const defaultMarkers = [
     "lng": 100.548168,
     "source": "2026-blackpearl",
     "year": 2026,
-    "website": "https://www.google.com/search?q=Somboon+Seafood+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.somboonseafood.com/",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -1344,7 +1334,6 @@ const defaultMarkers = [
     "lng": 100.538818,
     "source": "other",
     "year": 2026,
-    "website": "https://www.google.com/search?q=Suda+Restaurant+%E6%9B%BC%E8%B0%B7",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -1360,7 +1349,7 @@ const defaultMarkers = [
     "lng": 100.500942,
     "source": "other",
     "year": 2026,
-    "website": "https://www.google.com/search?q=Baan+Phad+Thai+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.baanphadthai.com/",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -1376,7 +1365,6 @@ const defaultMarkers = [
     "lng": 100.494113,
     "source": "other",
     "year": 2026,
-    "website": "https://www.google.com/search?q=Ka+Nom+Jeen+Pa+Lek+%E6%9B%BC%E8%B0%B7",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -1392,7 +1380,6 @@ const defaultMarkers = [
     "lng": 100.553031,
     "source": "other",
     "year": 2026,
-    "website": "https://www.google.com/search?q=Khao+Gaeng+Rang+Nam+%E6%9B%BC%E8%B0%B7",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -1408,7 +1395,6 @@ const defaultMarkers = [
     "lng": 100.587529,
     "source": "2025-michelin,2026-michelin",
     "year": 2026,
-    "website": "https://www.google.com/search?q=Soei+%E6%9B%BC%E8%B0%B7",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -1424,7 +1410,6 @@ const defaultMarkers = [
     "lng": 100.540066,
     "source": "2023-michelin,2024-michelin",
     "year": 2026,
-    "website": "https://www.google.com/search?q=Go+Ang+Pratunam+%E6%9B%BC%E8%B0%B7",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -1440,7 +1425,6 @@ const defaultMarkers = [
     "lng": 100.556452,
     "source": "other",
     "year": 2026,
-    "website": "https://www.google.com/search?q=Soi+Polo+Fried+Chicken+%E6%9B%BC%E8%B0%B7",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -1456,7 +1440,6 @@ const defaultMarkers = [
     "lng": 100.552492,
     "source": "other",
     "year": 2026,
-    "website": "https://www.google.com/search?q=Ann+Guay+Tiew+Kua+Gai+%E6%9B%BC%E8%B0%B7",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -1472,7 +1455,6 @@ const defaultMarkers = [
     "lng": 100.529291,
     "source": "other",
     "year": 2026,
-    "website": "https://www.google.com/search?q=Pa+Tong+Ko+%E6%9B%BC%E8%B0%B7",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -1488,7 +1470,7 @@ const defaultMarkers = [
     "lng": 100.538472,
     "source": "other",
     "year": 2026,
-    "website": "https://www.google.com/search?q=Wattanapanich+Seafood+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.facebook.com/wattanapanich.seafood/",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -1504,7 +1486,6 @@ const defaultMarkers = [
     "lng": 100.590655,
     "source": "other",
     "year": 2026,
-    "website": "https://www.google.com/search?q=Khao+Gaeng+Manee+%E6%9B%BC%E8%B0%B7",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -1520,7 +1501,7 @@ const defaultMarkers = [
     "lng": 100.548404,
     "source": "other",
     "year": 2026,
-    "website": "https://www.google.com/search?q=The+Local+by+Oamthong+Thai+Cuisine+%E6%9B%BC%E8%B0%B7",
+    "website": "http://www.thelocalthaicuisine.com/",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -1536,7 +1517,7 @@ const defaultMarkers = [
     "lng": 100.591284,
     "source": "2025-michelin,2026-michelin",
     "year": 2026,
-    "website": "https://www.google.com/search?q=Supanniga+Eating+Room+%E6%9B%BC%E8%B0%B7",
+    "website": "http://www.supannigaeatingroom.com/",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -1552,7 +1533,7 @@ const defaultMarkers = [
     "lng": 100.588944,
     "source": "other",
     "year": 2026,
-    "website": "https://www.google.com/search?q=Khao+%E6%9B%BC%E8%B0%B7",
+    "website": "http://www.khaogroup.com/index.php",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -1568,7 +1549,6 @@ const defaultMarkers = [
     "lng": 100.585379,
     "source": "other",
     "year": 2026,
-    "website": "https://www.google.com/search?q=Baan+Matum+%E6%9B%BC%E8%B0%B7",
     "photos": [
       "https://images.unsplash.com/photo-1528605248644-14dd04022da1?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1506354666786-959d6d497f1a?auto=format&fit=crop&w=800&q=80"
@@ -1584,7 +1564,7 @@ const defaultMarkers = [
     "lng": 100.506588,
     "source": "other",
     "year": 2026,
-    "website": "https://www.google.com/search?q=Spice+Market+%E6%9B%BC%E8%B0%B7",
+    "website": "https://www.anantara.com/en/riverside-bangkok/dining/spice-market",
     "photos": [
       "https://images.unsplash.com/photo-1498654896293-37aacf113fd9?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=800&q=80"
@@ -1600,7 +1580,6 @@ const defaultMarkers = [
     "lng": 100.490018,
     "source": "other",
     "year": 2026,
-    "website": "https://www.google.com/search?q=Ayutthaya+Boat+Noodles+%E6%9B%BC%E8%B0%B7",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80",
       "https://images.unsplash.com/photo-1540189549336-e6e99c3679fe?auto=format&fit=crop&w=800&q=80"
@@ -1696,7 +1675,7 @@ const defaultMarkers = [
     "lng": 100.5742,
     "category": "cafe",
     "source": "other",
-    "website": "https://www.google.com/search?q=Toby%27s+Cafe+Bangkok",
+    "website": "https://www.tobys.co.th/",
     "photos": [
       "https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=800&q=80"
     ],
@@ -1712,7 +1691,6 @@ const defaultMarkers = [
     "lng": 100.5956,
     "category": "streetfood",
     "source": "other",
-    "website": "https://www.google.com/search?q=Jodd+Fairs+Bangkok",
     "photos": [
       "https://images.unsplash.com/photo-1533900298318-6b8da08a523e?auto=format&fit=crop&w=800&q=80"
     ],
@@ -1728,7 +1706,7 @@ const defaultMarkers = [
     "lng": 100.6487,
     "category": "streetfood",
     "source": "other",
-    "website": "https://www.google.com/search?q=Train+Night+Market+Srinakarin",
+    "website": "https://www.facebook.com/trainnightmarketsrinakarin/",
     "photos": [
       "https://images.unsplash.com/photo-1555126634-323283e090fa?auto=format&fit=crop&w=800&q=80"
     ],
@@ -1744,7 +1722,6 @@ const defaultMarkers = [
     "lng": 100.5123,
     "category": "streetfood",
     "source": "other",
-    "website": "https://www.google.com/search?q=Yaowarat+Chinatown+Bangkok+food",
     "photos": [
       "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=800&q=80"
     ],
@@ -1760,7 +1737,7 @@ const defaultMarkers = [
     "lng": 100.5056,
     "category": "streetfood",
     "source": "other",
-    "website": "https://www.google.com/search?q=Thipsamai+Pad+Thai+Bangkok",
+    "website": "https://thipsamai.com/",
     "photos": [
       "https://images.unsplash.com/photo-1559314809-0d155014e29e?auto=format&fit=crop&w=800&q=80"
     ],
@@ -1776,7 +1753,6 @@ const defaultMarkers = [
     "lng": 100.5058,
     "category": "streetfood",
     "source": "other",
-    "website": "https://www.google.com/search?q=Jay+Fai+Bangkok",
     "photos": [
       "https://images.unsplash.com/photo-1565557623262-b51c2513a641?auto=format&fit=crop&w=800&q=80"
     ],
@@ -1840,7 +1816,6 @@ const defaultMarkers = [
     "lng": 100.5295,
     "category": "bar",
     "source": "other",
-    "website": "https://www.google.com/search?q=Tropic+City+Bangkok",
     "photos": [
       "https://images.unsplash.com/photo-1572116469696-31de0f17cc34?auto=format&fit=crop&w=800&q=80"
     ],
@@ -1856,7 +1831,7 @@ const defaultMarkers = [
     "lng": 100.5378,
     "category": "bar",
     "source": "other",
-    "website": "https://www.google.com/search?q=Cactus+Bangkok+speakeasy",
+    "website": "https://www.facebook.com/cactusbkk/",
     "photos": [
       "https://images.unsplash.com/photo-1551024709-8f23befc6f87?auto=format&fit=crop&w=800&q=80"
     ],
@@ -1927,7 +1902,7 @@ const defaultMarkers = [
     "avgPrice": "THB 3000-5000",
     "hours": "18:00-23:00"
   }
-];
+]
 
 const STORAGE_KEY = 'bangkok-map-markers'
 const FAVORITES_KEY = 'bangkok-map-favorites'
