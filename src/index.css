@@ -1,0 +1,90 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Inter:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --paper: #f5eee4;
+  --thai-dark: #23312d;
+  --thai-teal: #0d6554;
+  --thai-gold: #c59b5a;
+  --thai-warm: #d8b192;
+  --thai-muted: #836a55;
+  --thai-cream: #f8f1e4;
+}
+
+html, body, #root { min-height: 100%; }
+body {
+  margin: 0;
+  font-family: 'Inter', 'Noto Sans SC', sans-serif;
+  color: var(--thai-dark);
+  background: radial-gradient(circle at 18% 15%, rgba(197,155,90,0.16), transparent 11%),
+              radial-gradient(circle at 86% 10%, rgba(14,102,85,0.10), transparent 16%),
+              linear-gradient(180deg, #f7efe5 0%, #fbf7f0 100%);
+  background-attachment: fixed;
+}
+
+* { box-sizing: border-box; }
+
+::selection {
+  background: rgba(197,155,90,0.25);
+}
+
+.scrollbar-thin::-webkit-scrollbar { width: 8px; }
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--thai-gold), var(--thai-teal));
+  border-radius: 999px;
+}
+
+.scrollbar-thin { scrollbar-width: thin; scrollbar-color: var(--thai-gold) transparent; }
+
+.leaflet-container {
+  width: 100%;
+  height: 100%;
+  border-radius: 32px;
+}
+
+.leaflet-popup-content-wrapper, .leaflet-popup-tip {
+  background: #fff8f0;
+  border: 1px solid rgba(197,155,90,0.35);
+  border-radius: 18px;
+}
+
+.leaflet-popup-content {
+  color: var(--thai-dark);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.5;
+}
+
+.leaflet-popup-content strong {
+  display: block;
+  margin-bottom: 0.35rem;
+  color: var(--thai-dark);
+}
+
+.leaflet-popup-close-button {
+  color: var(--thai-dark);
+}
+
+/* Custom marker fix */
+.custom-marker {
+  background: transparent !important;
+  border: none !important;
+}
+
+/* Ensure modal above leaflet controls */
+.leaflet-control {
+  z-index: 500 !important;
+}
+
+/* Modal scrollbar */
+.overflow-auto::-webkit-scrollbar {
+  width: 6px;
+}
+.overflow-auto::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, var(--thai-gold), var(--thai-teal));
+  border-radius: 999px;
+}
+
