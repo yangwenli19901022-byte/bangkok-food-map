@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Map from './components/Map'
 import DetailsModal from './components/DetailsModal'
-import defaultMarkers from './data/places.json'
+import defaultMarkers from './data/places.js'
 
 const STORAGE_KEY = 'bangkok-map-markers'
 const FAVORITES_KEY = 'bangkok-map-favorites'
